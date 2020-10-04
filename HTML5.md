@@ -155,7 +155,61 @@ source.onmessage=function(event)
 
 
 
+## HTML文档结构
 
+### 1. 文档类型声明
+
+> 用来说明该文档是html类型
+
++ HTML5：`<!DOCTYPE html>`
++ HTML4.01（了解）：`<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">`
+
+### 2. html标签对
+
+> 标识文档的开始和结束，该标签有两个属性dir和lang
+
++ dir属性文档内容从左到右还是从右到左，可省略
++ lang是指明文档使用的内容，zh-CN、en
+
+> > 中间的部分是文档的头部head和主题body
+
+#### 1）head标签对
+
+1. title标签：定义网页的标题
+
+2. meta标签：一般用于定义页面的特殊信息，例如页面的关键字 ，页面描述等
+
+   + charset属性，值有：ASCII、GB2312、Unicode、UTF-8（常用）
+
+     `<meta charset="UTF-8">`
+
+   + name属性：把content属性关联到这个名词
+
+   + http-equiv属性：把content属性关联到HTML头部
+
+   + content属性：定义与http-equiv或name属性相关的元信息，和这两个属性的其中一个同时使用。
+
+3. link标签：用于引入外部样式文件（CSS文件）
+
+   + type属性：text/css，被链接文档的类型
+
+   ![img](https://img2018.cnblogs.com/blog/1423899/201907/1423899-20190706103926766-1614612256.png)
+
+4. style标签：用于定义元素的CSS样式
+
+5. script标签：用于定义页面的JavaScript代码，或引入外部JavaScript文件
+
+   + type属性：test/javascript
+   + defer属性：值是defer，对脚本执行进行延迟，直到页面加载为止。**只有IE支持该属性**
+   + src属性：引入外部脚本的路径
+   + async属性：值是async，**仅适用于外部脚本**。（HTML5新增的）
+     + 脚本相对于页面的其余部分异步地执行（当页面继续进行解析时，脚本将被执行）
+     + 如果不使用 async 且 defer="defer"：脚本将在页面完成解析时执行
+     + 如果既不使用 async 也不使用 defer：在浏览器继续解析页面之前，立即读取并执行脚本
+
+#### 2）body标签对
+
+页面主体的内容，包括h1、h2、h3、p、img等等
 
 
 
