@@ -62,7 +62,7 @@
 4. 获取服务器端给与客户端的响应数据
 
    + `xhr.responseText`是服务器端返回给客户端的数据（服务端响应给客户端的响应数据）
-   + ajax接收完服务端的响应之后会触发onload事件
+   + `ajax`接收完服务端的响应之后会触发`onload`事件
 
    ```js
    xhr.onload = function(){
@@ -72,9 +72,9 @@
 
 + 具体实现的一个例子：
 
-  1. 先去cmd执行`nodemon app.js`启动服务器
+  1. 先去`cmd`执行`nodemon app.js`启动服务器
 
-  2. 写js文件（01-Ajax入门.html），创建ajax
+  2. 写`js`文件（01-Ajax入门.html），创建ajax
 
      ```js
      // 1.创建Ajax对象
