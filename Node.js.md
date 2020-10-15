@@ -167,3 +167,206 @@ CommonJS规定：
 2. module变量是一个对象，它的exports属性是对外的接口。
 3. 加载某个模块，其实是加载该模块的module.exports属性。require()方法用于加载模块。
 
+
+
+## NPM与包
+
+> 包是基于内置模块封装出来的第三方模块
+
+[npm包官方网站](www.npmjs.com)：可查找所有第三方包的文档
+
++ node_modules文件夹：存放所有已安装到项目中的包。require()导入第三方包时，就是从这个目录中查找并加载包。
++ package-lock.json配置文件：记录node_modules目录下的每一个包的下载信息，例如包的名字、版本号、下载地址等。
+
+
+
+### 1. package.json
+
+因为第三方包的体积过大，不方便团队成员之间共享项目源代码，所以共享时需要剔除node_modules。
+
+在项目根目录中，创建一个叫做package.json的配置文件，即可用来记录项目中安装了哪些包。
+
+> 注意：在今后的项目开发中，一定要把node_modules文件夹，添加到.gitignore忽略文件中
+
+
+
++ 快速创建package.json：`npm init -y`
+  + 上述命令只能在英文的目录下成功运行（不要使用中文，不能出现空格）
+  + 创建package.json后，以后执行：npm install 包，npm包管理工具会自动把包的名称和版本号，记录到package.json中。
++ 执行`npm i`时
+  + npm包管理工具会先读取package.json中的 dependencies 节点，读取到记录的所有依赖包和版本号之后，npm包管理工具会把这些包一次性下载到项目中
+
+### 2. devDependencies节点
+
+>  如果某些包只在项目开发阶段会用到，在项目上线之后不会用到，则建议把这些包记录到devDependencies节点中。
+>
+> 与之相应的，如果某些包在开发和项目上线之后都需要用到，则建议把这些包记录到dependencies节点中。
+
++ 把包记录到devDependencies节点：`npm i 包名 -D`
+
+
+
+### 3. nrm
+
+为了更方便的切换下包的镜像源，可以安装nrm小工具，利用nrm提供的终端命令，可以快速查看和切换下包的镜像源。
+
+1. 通过npm包管理器，将nrm安装为全局可用的工具
+
+   `npm i nrm -g`
+
+2. 查看所有可用的镜像源
+
+   `nrm ls`
+
+3. 将下包的镜像源切换为taobao镜像
+
+   `nrm use taobao`
+
+
+
+### 4. 包的分类
+
++ 项目包
+  + 开发依赖包：devDependencies
+  + 核心依赖包：dependencies
++ 全局包
+  + 只有工具性质的包，才有全局安装的必要性，因为它们提供了好用的终端命令。
+  + 全局包被安装到D:\nodejs\node_global\node_modules（我的电脑，这个不用管，装包的时候终端会告诉你的）
+
+
+
+有哪些全局包呢：
+
+1. nrm：管理镜像的小工具
+2. i5ting_toc：把md文档转为html页面的小工具
+
+
+
+### 5. 开发属于自己的包
+
+包的目录：
+
+ ![image-20201015090719564](C:\Users\xia\AppData\Roaming\Typora\typora-user-images\image-20201015090719564.png)
+
+把根据不同的功能进行模块化，用js文件存放并放在src目录下，并用`module.exports`向外暴露成员，在index中引入暴露的模块
+
+```js
+//index.js包的入口文件
+
+const date = require('./src/dataFormat');
+const escape = require('./src/htmlEscape');
+
+//用展开符展开所有属性，向外暴露需要的成员
+module.exports = {
+	...date,
+	...escape
+}
+```
+
+## 模块的加载机制
+
+### 1. 优先从缓存中加载
+
++ 模块在第一次加载后会被缓存，这也意味着多次调用`require()`不会导致模块的代码被执行多次。从而提高模块的加载效率。
+
+### 2. 内置模块的加载机制
+
++ 内置模块的加载优先级最高
+
+### 3. 自定义模块的加载机制
+
++ 使用require()加载自定义模块时，必须指定以./或../开头的路径标识符。在加载自定义模块时，如果没有指定./或../这样的路径标识符，则node会把它当作内置模块或第三方模块进行加载
++ 同时，在require自定义模块时，如果省略了文件的扩展名，则Node.js会按顺序分别尝试加载以下的文件：
+  + 按照确切的文件名进行加载（因为有可能有没有扩展名的文件）
+  + 补全.js扩展名进行加载
+  + 补全.json扩展名进行加载
+  + 补全.node扩展名进行加载
+  + 加载失败，终端报错
+
+### 4. 第三方模块的加载机制
+
++ 如果传递给require()的模块标识符不是一个内置模块，也没有以./或者../开头，则Node.js会从当前模块的父目录开始，尝试从/node_modules文件夹中加载第三方模块
++ 如果没有找到对应的第三方模块，则移动再上一层父目录中进行加载，直到文件系统的根目录。
+
+### 5. 目录作为模块
+
++ 当把目录作为模块标识符，传递给require()进行加载的时候，有三种加载方式：
+  1. 在被加载的目录下查找一个叫做package.json的文件，并寻找main属性，作为require()加载的入口
+  2. 如果目录里咩有package.json文件，或者main入口不存在或者无法解析，则Node.js将会试图加载目录下的index.js文件
+  3. 如果以上两步都失败了，则Node.js会在终端打印错误消息，报告模块的缺失：Error: Cannot find module 'xxx'
+
+
+
+## 什么是Express
+
+> Express是基于Node.js平台，快速、开放、极简的Web开发框架
+
++ 本质：就是一个npm的第三方包，提供了快速创建Web服务器的便捷方法
+
+
+
+## Express可以做什么
+
+对于前端程序员来说，最常见的两种服务器，分别是：
+
++ Web网站服务器：专门对外提供Web网页资源的服务器
++ API接口服务器：专门对外提供API接口的服务器
+
+使用Express，我们可以方便、快速的创建Web网站的服务器或者API接口的服务器
+
+
+
+## 使用Express
+
+### 1. 创建基本的web服务器
+
+首先安装第三方包：npm i express
+
+```js
+const express = require('express');
+
+const app = express();
+
+app.listen(80, ()=>{
+	console.log('express serve running at http://127.0.0.1');
+})
+```
+
+
+
+### 2. 监听GET请求
+
+用send方法给客户端发送内容
+
+```js
+app.get('客户端请求的URL地址',(req,res)=>{
+	// 用send方法向客户端发送JSON对象
+	res.send({name: 'zs', age: 20});
+})
+```
+
+
+
+### 3. 获取URL中携带的查询参数
+
+通过req.query对象，可以访问到客户端通过查询字符串的形式（比如`?name=zs&age=20`），发送到服务器的参数
+
++ `req.query`默认是一个空对象
++ 客户端通过查询字符串的形式（比如`?name=zs&age=20`），发送到服务器的参数，可以通过`req.query.name`访问到（它会自动解析到`req.query`这个对象中）
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

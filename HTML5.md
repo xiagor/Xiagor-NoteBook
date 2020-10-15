@@ -6,22 +6,108 @@
 
 `<header><article><footer><nav><aside><section>`
 
+![img](https://upload-images.jianshu.io/upload_images/15827882-4057d561069e7a15.png?imageMogr2/auto-orient/strip|imageView2/2/w/484/format/webp)
+
 ### 2. 增强型表单
 
 + **新的 form 属性：**
   + autocomplete
-  + novalidate
-
+    + form 域自动完成功能，值为`on`/`off`
++ novalidate
+    + 提交表单时不应该验证 form 或 input 域，值为`true`
+  
 + **新的 input 属性：**
+  
+  > input的type属性：（规定input元素的类型）
+  >
+  > > text
+  > >
+  > > button
+  > >
+  > > checkbox：多选按钮
+  > >
+  > > file：文件上传
+  > >
+  > > hidden：隐藏字段，对于用户不可见，一般会存储一个默认值，值可以由js进行修改，但是提交的时候会一起上传
+  > >
+  > > image：定义图片形式的提交按钮
+  > >
+  > > password
+  > >
+  > > radio：单选按钮
+  > >
+  > > reset：重置按钮，会清空表单中的所有数据
+  > >
+  > > submit：提交按钮用于向服务器发送表单数据，数据会发送到表单的`action`属性中指定的页面
+  > >
+  > > > HTML5新增的type类型：
+  > > >
+  > > > color：选择颜色，可以从拾色器中选取颜色
+  > > >
+  > > > 日期和时间选择器：date、month、week、time、datatime等等
+  > > >
+  > > > email：提交表单时，会自动地对email字段的值进行验证
+  > > >
+  > > > number：包含数字值的输入字段，可设置数字长度的限制
+  > > >
+  > > > range：某个范围的滑块
+  > > >
+  > > > search：用于搜索字段，外观和text一样
+  > > >
+  > > > tel：用于电话号码（感觉外观和text也一样？只是语义的差别吧）
+  > > >
+  > > > url：URL地址的输入字段，会在提交表单时对url字段的值自动进行验证（）
+  > > >
+  > > > + 一个完整的URL包括：协议部分、网址、文件地址部分
+  > > >   + 协议部分：以//分隔符，有HTTP、FTP、File、HTTPS等协议，在地址栏输入网址时，协议部分不用输入的，浏览器会自动补上默认的HTTP协议
+  > > >   + 网址：例如www.baidu.com、www.taobao.com等
+  > > >     + 去掉www的前缀的部分叫域名
+  > > >     + 域名的最右边的是顶级域名，常见的比如：.com表示商业机构，.org表示非盈利性组织，.gov表示政府机构，.edu表示教育及科研机构
+  > > >     + 用来表示国际顶级域名的比如：.cn表示中国，.us表示美国，.jp表示日本。
+  > > >   + 文件地址部分：
+  > > >     + 从域名后第一个/到最后一个/为止，是虚拟目录部分，
+  > > >     + 从最后一个/开始到?为止，是文件名
+  
   + autocomplete
+  
+    + input域自动完成功能，值为`on`/`off`
+  
   + autofocus
+  
+    + 自动地获得焦点，值为`autofocus`
+  
   + form
-  + form overrides (formaction, formenctype, formmethod, formnovalidate, formtarget)
+  
+    + form 属性规定输入域所属的一个或多个表单（就是只要input标签的这个属性的值为某个form的id值，那这个input标签就是绑定这个form表单的）
+  
+  + 表单重写属性： (formaction, formenctype, formmethod, formnovalidate, formtarget)
+  
+    + 适用`sumbit`和`image`类型的`input`标签
+  
   + height 和 width
+  
+    + 只适用于image类型的input标签（就是用图片做按钮的那种）
+  
   + list
+  
+    + list 属性规定输入域的 datalist。datalist 是输入域的选项列表。
+  
+      ```html
+      Webpage: <input type="url" list="url_list" name="link" />
+      <datalist id="url_list">
+      <option label="W3Schools" value="http://www.w3school.com.cn" />
+      <option label="Google" value="http://www.google.com" />
+      <option label="Microsoft" value="http://www.microsoft.com" />
+      </datalist>
+      ```
+  
   + min, max 和 step
+    + 适用于以下类型的input标签：number、range
   + multiple
+    + 规定输入域可选择多个值，适用于以下类型的标签：
+    + file
   + pattern (regexp)
+    + 用于验证input域的模式（正则表达式）
   + placeholder
   + required
 
