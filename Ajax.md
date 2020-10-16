@@ -41,7 +41,7 @@
 
 > Ajax相当于浏览器发送请求与接受响应的代理人，以实现不影响用户浏览页面的情况下，局部更新页面数据，从而提高用户体验。
 
-![image-20200626095200265](C:\Users\xia\AppData\Roaming\Typora\typora-user-images\image-20200626095200265.png)
+![image-20200626095200265](Images/Ajax/image-20200626095200265.png)
 
 #### 2.Ajax的实现步骤
 
@@ -216,7 +216,7 @@
 
     + 接收到的是json字符串
 
-    ![image-20200626161027102](C:\Users\xia\AppData\Roaming\Typora\typora-user-images\image-20200626161027102.png)
+    ![image-20200626161027102](Images/Ajax/image-20200626161027102.png)
 
 ##### POST请求方式
 
@@ -231,7 +231,7 @@
 
     > 在HTTP请求和响应的过程中传递的数据块就叫报文，包括要传送的数据和一些附加信息，这些数据和信息要遵守规定好的格式
 
-    ![image-20200626190219544](C:\Users\xia\AppData\Roaming\Typora\typora-user-images\image-20200626190219544.png)
+    ![image-20200626190219544](Images/Ajax/image-20200626190219544.png)
 
   + 04-传递post请求参数.html:
 
@@ -436,7 +436,7 @@
 
    + 执行结果：
 
-     ![image-20200626213439018](C:\Users\xia\AppData\Roaming\Typora\typora-user-images\image-20200626213439018.png)
+     ![image-20200626213439018](Images/Ajax/image-20200626213439018.png)
 
      
 
@@ -466,7 +466,7 @@
 
    + 执行结果：
 
-     ![image-20200626213653517](C:\Users\xia\AppData\Roaming\Typora\typora-user-images\image-20200626213653517.png)
+     ![image-20200626213653517](Images/Ajax/image-20200626213653517.png)
 
      
 
@@ -490,7 +490,7 @@
 
    + 运行结果：
 
-     ![image-20200626214010771](C:\Users\xia\AppData\Roaming\Typora\typora-user-images\image-20200626214010771.png)
+     ![image-20200626214010771](Images/Ajax/image-20200626214010771.png)
 
      
 
@@ -531,7 +531,7 @@
 
    + 执行结果
 
-     ![image-20200626214903259](C:\Users\xia\AppData\Roaming\Typora\typora-user-images\image-20200626214903259.png)
+     ![image-20200626214903259](Images/Ajax/image-20200626214903259.png)
 
      ![image-20200626215134668](C:\Users\xia\AppData\Roaming\Typora\typora-user-images\image-20200626215134668.png)
 
@@ -833,7 +833,7 @@ ajax({
    </body>
    ```
 
-   ![image-20200627210211298](C:\Users\xia\AppData\Roaming\Typora\typora-user-images\image-20200627210211298.png)
+   ![image-20200627210211298](Images/Ajax/image-20200627210211298.png)
 
 5. **对服务器返回的数据进行处理**
 

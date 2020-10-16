@@ -4,7 +4,7 @@
 
 ​		简单的来说就是一个运行环境，（就像js可以在浏览器中的V8引擎解析运行，这是前端的运行环境。）在该运行环境中，js就可以做后端开发。
 
-![image-20201009211432407](C:\Users\xia\AppData\Roaming\Typora\typora-user-images\image-20201009211432407.png)
+![image-20201009211432407](Images/Node.js/image-20201009211432407.png)
 
 ![image-20201009211450908](C:\Users\xia\AppData\Roaming\Typora\typora-user-images\image-20201009211450908.png)
 
@@ -246,7 +246,7 @@ CommonJS规定：
 
 包的目录：
 
- ![image-20201015090719564](C:\Users\xia\AppData\Roaming\Typora\typora-user-images\image-20201015090719564.png)
+ ![image-20201015090719564](Images/Node.js/image-20201015090719564.png)
 
 把根据不同的功能进行模块化，用js文件存放并放在src目录下，并用`module.exports`向外暴露成员，在index中引入暴露的模块
 
@@ -347,12 +347,117 @@ app.get('客户端请求的URL地址',(req,res)=>{
 
 
 
-### 3. 获取URL中携带的查询参数
+### 3. 获取路由地址参数
 
-通过req.query对象，可以访问到客户端通过查询字符串的形式（比如`?name=zs&age=20`），发送到服务器的参数
++ req.query，可以访问到客户端通过查询字符串的形式（比如`?name=zs&age=20`），发送到服务器的参数
+  + `req.query`默认是一个空对象
 
-+ `req.query`默认是一个空对象
-+ 客户端通过查询字符串的形式（比如`?name=zs&age=20`），发送到服务器的参数，可以通过`req.query.name`访问到（它会自动解析到`req.query`这个对象中）
+  + 客户端通过查询字符串的形式（比如`?name=zs&age=20`），发送到服务器的参数，可以通过`req.query.name`访问到（它会自动解析到`req.query`这个对象中）
+
+  + ```js
+    app.get('/csdn',function(req,res){
+        var name=req.query.name;
+        res.send(name)
+    });
+    
+    127.0.0.1:3000/csdn?name=参数   //var name=req.query.name; 所以name就是=后的参数
+    ```
+
++ req.params，可以获取到比较优雅的路由地址参数
+
+  + 可以有多个动态参数
+
+  + ```js
+    app.get('/csdn/:id',function(req,res){
+        var id=req.params.id;
+        res.send(id)
+    });
+    
+    127.0.0.1:3000/csdn/参数   //var id=req.params.id; 所以'参数'就是传递给:id，所以id就是'参数'
+    ```
+
+
+
+### 4. 托管静态服务资源
+
+`express.static()`可以方便地创建一个静态资源服务器，例如：
+
+```js
+app.use(express.static('public'));
+```
+
+这样，就可以访问public目录中的所有文件了：
+
+http://localhost:3000/images/bg.jpg
+
+http://localhost:3000/css/style.css
+
+http://localhost:3000/index.html
+
++ 可以创建多个，但是如果访问index.html这种多个文件夹都有同样文件的情况下，他会按顺序查找到第一个先并加载。
+
+**注意**：Express在指定的静态目录中查找文件，并对外提供资源的访问路径。因此，存放静态文件的目录名（public）是不会出现在URL中。
+
++ 挂载路径前缀：**（我试了不行！！！）**
+
+  ```js
+  app.use('public', express.static('public'));
+  ```
+
+  这样，就可以访问public目录中的所有文件了：
+
+  http://localhost:3000/public/images/bg.jpg
+
+  http://localhost:3000/public/css/style.css
+
+  http://localhost:3000/public/index.html
+
+
+
+## Epress 路由
+
+> 在Express中，路由指的是客户端的请求与服务器处理函数之间的映射关系
+
+Express中的路由分三部分组成，分别是请求的类型、请求的URL地址、处理函数，格式如下：
+
+```js
+app.get('/', (req, res) => {
+	//...处理并响应这次请求
+})
+
+app.post('/', (req, res) => {
+	//...处理并响应这次请求
+})
+```
+
+给一个完整的具体例子：
+
+```js
+const express = require('express');
+const app = express();
+
+//挂载路由
+app.get('/',(req, res)=>{
+	res.send('hellow word');
+});
+app.post('/',(req, res)=>{
+	res.send('Hellow World');
+});
+
+app.listen(80, ()=>{
+	console.log('http://127.0.0.1:80');
+})
+```
+
+
+
+### 1. 模块化路由
+
+> 为了方便对路由进行模块化管理，Express不建议将路由直接挂载到app上，而是推荐将路由抽离为单独的模块。
+
+
+
+
 
 
 

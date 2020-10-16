@@ -61,7 +61,7 @@
 
     2. 在GitHub中添加公钥的内容
 
-       ![](http://note.youdao.com/yws/public/resource/4653994abae090b764e7fb65a039a7fe/xmlnote/9375B3E1383A489395F26E601FD6F16B/2230)
+       ![](Images/git/2230)
 
     3. 先在github上建一个空仓库，注意不要勾选readme初始化
 

@@ -6,7 +6,7 @@
 
 `<header><article><footer><nav><aside><section>`
 
-![img](https://upload-images.jianshu.io/upload_images/15827882-4057d561069e7a15.png?imageMogr2/auto-orient/strip|imageView2/2/w/484/format/webp)
+![img](Images/HTML5/15827882-4057d561069e7a15.png)
 
 ### 2. 增强型表单
 
@@ -14,7 +14,8 @@
   + autocomplete
     + form 域自动完成功能，值为`on`/`off`
 + novalidate
-    + 提交表单时不应该验证 form 或 input 域，值为`true`
+    
+  + 提交表单时不应该验证 form 或 input 域，值为`true`
   
 + **新的 input 属性：**
   
@@ -102,11 +103,13 @@
       ```
   
   + min, max 和 step
+    
     + 适用于以下类型的input标签：number、range
   + multiple
     + 规定输入域可选择多个值，适用于以下类型的标签：
     + file
   + pattern (regexp)
+    
     + 用于验证input域的模式（正则表达式）
   + placeholder
   + required
@@ -279,7 +282,7 @@ source.onmessage=function(event)
 
    + type属性：text/css，被链接文档的类型
 
-   ![img](https://img2018.cnblogs.com/blog/1423899/201907/1423899-20190706103926766-1614612256.png)
+   ![img](Images/HTML5/1423899-20190706103926766-1614612256.png)
 
 4. style标签：用于定义元素的CSS样式
 

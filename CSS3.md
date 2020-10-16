@@ -416,7 +416,7 @@ div{
 
 效果如图：
 
-![image-20201008131325550](C:\Users\xia\AppData\Roaming\Typora\typora-user-images\image-20201008131325550.png)
+![image-20201008131325550](Images/CSS3/image-20201008131325550.png)
 
 1. 用css边框模拟出三角效果
 2. 宽度高度为0
