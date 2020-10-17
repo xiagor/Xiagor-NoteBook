@@ -14,7 +14,7 @@
   + autocomplete
     + form 域自动完成功能，值为`on`/`off`
 + novalidate
-    
+  
   + 提交表单时不应该验证 form 或 input 域，值为`true`
   
 + **新的 input 属性：**
@@ -352,7 +352,20 @@ source.onmessage=function(event)
 
 
 
+## 响应式Web设计——Viewport
 
+> viewport是用户页面的可视区域
+
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+```
+
++ width：控制viewport的大小，可以指定的一个值，如600，或者特殊的值，如device-width（设备的宽度）
++ height：和width相对应，device-height就是设备的高度
++ initial-scale：初始缩放比例，即是当页面第一次load的时候缩放比例
++ maximum-scale：允许用户缩放到的最大比例
++ minimum-scale：允许用户缩放到的最小比例
++ user-scalable：用户是否可以手动缩放（yes or no）
 
 
 

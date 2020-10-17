@@ -26,7 +26,7 @@
 + `ElementUI`
 + `Ajax`
 + `JSONP`
-  + 和跨域有关？
+  + 和跨域有关
 + `Node.js`
   + 基础阶段：100%
   + 包括npm等模块
