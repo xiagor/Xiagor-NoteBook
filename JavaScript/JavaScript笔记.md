@@ -58,8 +58,7 @@
 
 
 
-
-## JS判断数据的的五种方法
+## JS判断数组的的五种方法
 
 ### 1. instanceof关键字
 
@@ -403,7 +402,7 @@ console.log(combine(m,n));                     // [1, 2, 3]
 | onkeydown   | 用户按下键盘按键             |
 | onload      | 浏览器已经完成页面加载       |
 
-### 浏览器事件机制
+
 
 
 
@@ -525,6 +524,239 @@ a = {
 
 
 ![js面试题大坑——隐式类型转换](Images/JavaScript%E7%AC%94%E8%AE%B0/1538025911178e28d7c85c1)
+
+
+
+
+
+## String方法
+
+### 1. 字符方法
+
+#### 1）charAt()
+
+接收一个字符位置的参数，以单字符字符串的形式返回该位置的字符。
+
+```js
+var stringValue = "hello world";
+console.log(stringValue.charAt(1));		//'e'
+```
+
+
+
+#### 2）charCodeAt()
+
+接收一个字符位置的参数，以单字符字符串的形式返回该位置的字符**的字符编码**。
+
+```js
+var stringValue = "hello world";
+console.log(stringValue.charAt(1));		//'101'
+```
+
+
+
+#### 3）ES5访问个别字符的方法
+
+使用方括号加数字索引访问
+
+> IE7及更早版本不支持
+
+```js
+var stringValue = "hello world";
+console.log(stringValue[1]);		//'e'
+```
+
+
+
+### 2. 字符串操作方法
+
+> 都是返回一个新的字符串
+
+#### 1）concat()
+
+拼接字符串的，建议直接用 + 拼接。
+
+#### 2）slice()、substr()、substring()
+
+| 方法        | 参数一（必需）     | 参数二（可选）                               | 参数一为负值时                      | 参数二为负值时 |
+| ----------- | ------------------ | -------------------------------------------- | ----------------------------------- | -------------- |
+| slice()     | 子字符串的开始位置 | 子字符串结束位置（不包括），默认到字符串末尾 | 负值+length                         | 负值+length    |
+| substr()    | 子字符串的开始位置 | 字符个数，默认到字符串末尾                   | 负值+length                         | 0              |
+| substring() | 子字符串的开始位置 | 子字符串结束位置（不包括），默认到字符串末尾 | 0（该方法会以较小的数作为开始位置） | 0              |
+
+
+
+### 3. 字符串位置方法
+
+#### 1）indexOf()、lastIndexOf()
+
++ 参数一（必需）：需要查找的子字符串
++ 参数二（可选）：从字符串哪个位置开始查找
++ 返回值：子字符串第一次出现的下标值，没有则返回-1
++ 区别：
+  + indexOf：是从字符串的开头开始查找
+  + lastIndexOf：是从字符串的末尾向前查找
+
+#### 2）查找所有出现过的字符串的方法
+
+```js
+var stringValue = "helloworlodijjkslhkguuhghlkddfljkdjag";
+var position = new Array();
+var pos = stringValue.indexOf('l');
+
+while (pos > -1) {
+    position.push(pos);
+    pos = stringValue.indexOf('l', pos + 1);
+}
+
+console.log(position);
+```
+
+
+
+### 4. trim()删除前后空格
+
+删除前置及后缀的所有空格，返回一个字符串的副本，不会改变原字符串。
+
+
+
+### 5. 字符串大小写转换方法
+
++ toLowerCase()：字符串转换为小写，无传参
++ toUpperCase()：字符串转换为大写，无传参
+
+
+
+### 6. 字符串的模式匹配方式
+
+#### 1）match()
+
++ 参数为一个正则表达式或者一个RegExp对象
+  + 当参数是一个字符串或一个数字，它会使用new RegExp(obj)来隐式转换成一个 [`RegExp`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/RegExp)
++ 返回一个数组
+  + 如果正则表达式是非全局，例如`/.at/`，返回的数组除了有一个匹配到的字符串，还有`index`、`input`、`groups`属性
+  + 如果正则表达式是全局，例如`/.at/g`，返回一个正常的数组，从左到右存放匹配到的所有字符串。
+
+```js
+var text = "cat, bat, sat, fat";
+var pattern1 = /.at/;
+var pattern2 = /.at/g;
+
+//pattern 是 RegExp对象的实例
+console.log(pattern2.__proto__ === RegExp.prototype);	//true
+
+
+var matches1 = text.match(pattern1);
+var matches2 = text.match(pattern2);
+console.log(matches1);
+// ["cat", index: 0, input: "cat, bat, sat, fat", groups: undefined]
+console.log(matches2);
+// ["cat", "bat", "sat", "fat"]
+```
+
+#### 2）search()
+
++ 参数为一个正则表达式或者一个RegExp对象
+  + 当参数是一个字符串或一个数字，它会使用new RegExp(obj)来隐式转换成一个 [`RegExp`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/RegExp)
++ 返回正则表达式在字符串中首次匹配项的索引，否则返回-1。
+
+#### 3）replace()
+
+> ```js
+> str.replace(regexp|substr, newSubStr|function)
+> ```
+
++ 第一个参数
+  + regexp：一个正则表达式或者RegExp对象，该正则所匹配的内容会被第二个参数的返回值（指函数的返回值）替换掉
+  + substr：一个字符串，其被视为一整个字符串，而不是一个正则表达式，仅第一个匹配项会被替换掉
++ 第二个参数
+  + newSubStr：用于替换掉第一个参数匹配部分的字符串。（该字符串可以**内插一些特殊的变量名**）
+  + function：该函数的返回值将替换掉第一个参数匹配到的结果。
++ 返回值
+  + 一个替换好的新的字符串
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## new的时候发生了什么
+
+> new表达式是配合构造函数使用，用来创建对象。（还有一个创建对象的方式是对象字面量）
+
+```js
+function O(name){
+	this.name = name;
+}
+var o = new O('虾哥');
+```
+
+在使用new操作符来调用一个构造函数的时候，发生了四件事：
+
+```js
+var obj = {};
+obj.__proto__ = O.prototype;
+O.call(obj);
+return obj;
+```
+
+1. 创建一个空对象obj
+2. 将这个空对象的`__proto__`成员指向了构造函数对象的prototype成员对象，这是最关键的一步
+3. 将构造函数的作用域赋给新对象，因此O函数中的this指向新对象obj，然后再调用O函数。于是我们就给obj对象赋值了一个成员变量name，这个成员变量的值是"虾哥"。（其实这里应该还有arguments的解构赋值的，具体参考[点击该文章](https://www.jianshu.com/p/9bf81eea03b2)）
+4. **返回新对象obj**。但如果构造函数包含返回值：
+   + 返回值必须是this对象、或者是其他非对象类型的值
+   + 如果返回值是引用类型（如对象、数组、函数等），则new出来的对象就会被返回的引用类型值给替换了。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

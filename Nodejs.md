@@ -455,23 +455,304 @@ app.listen(80, ()=>{
 
 > 为了方便对路由进行模块化管理，Express不建议将路由直接挂载到app上，而是推荐将路由抽离为单独的模块。
 
+1. 创建路由模块对应的js文件
+2. 调用express.Router()函数创建路由对象
+3. 向路由对象上挂载具体的路由
+4. 使用module.exports向外共享路由对象
+5. 使用app.use()函数注册路由模块
+
+```js
+// router.js
+const express = require('express');
+const router = express.Router();
+
+router.get('/user/list', (req, res) => {
+    res.send('Get user list.');
+});
+
+router.post('/user/add', (req, res) => {
+    res.send('Add new user');
+});
+
+module.exports = router;
+```
+
+```js
+// app.js
+const express = require('express');
+const app = express();
+
+// 1. 导入路由模块
+const router = require('./router');
+// 2. 使用app.use() 注册路由模块
+app.use(router);
+
+app.listen(80, () => {
+    console.log('http://127.0.0.1');
+});
+```
 
 
 
+## Express中间件
+
+> 当一个请求到达Express的服务器之后，可以连续调用多个中间件，从而对请求进行预处理。
+
+### 1. 中间件的格式
+
+```js
+var express = require('express');
+var app = express();
+
+app.get('/', function(req, res, next) => {
+        next();
+});
+
+app.listen(3000);
+```
+
+中间件函数的形参列表中，**必须包含next参数**，而路由处理函数中只包含req和res。
+
+####  next函数
+
+> next函数是实现多个中间件连续调用的关键，它表示把流转关系转交给下一个中间件或路由。
 
 
 
+### 2. 中间件的作用
+
+> 多个中间件之间，共享同一份req和res，基于这样的特性，我们可以在上游的中间件中，统一为req或res对象添加自定义的属性和方法，供下游的中间件或路由进行使用。
 
 
 
+### 3. 全局和局部中间件
+
+#### 1）全局中间件
+
+```js
+const express = require('express');
+const app = express();
+
+app.use((req, res, next) => {
+    console.log('这是一个全局中间件');
+    next();
+})
+
+// 1. 导入路由模块
+const router = require('./router');
+// 2. 使用app.use() 注册路由模块
+app.use(router);
 
 
 
+app.listen(80, () => {
+    console.log('http://127.0.0.1');
+});
+```
+
+**注意：一定要在路由之前注册中间件**，他们是按顺序调用的
+
+#### 2）局部中间件
+
++ 一个局部中间件
+
+```js
+const mw1 = (req, res, next) => {
+    console.log('调用了局部中间件');
+    next();
+}
+
+router.get('/user/list', mw1, (req, res) => {
+    console.log('打开list了');
+    res.send('Get user list.');
+});
+```
+
++ 多个局部中间件
+
+```js
+const mw1 = (req, res, next) => {
+    console.log('调用了局部中间件1');
+    next();
+}
+const mw2 = (req, res, next) => {
+    console.log('调用了局部中间件2');
+    next();
+}
+
+//也可以写成[mw1, mw2]一个数组作为第二个参数
+router.get('/user/list', mw1, mw2, (req, res) => {
+    console.log('打开list了');
+    res.send('Get user list.');
+});
+```
+
+**注意：一定要在路由之前注册中间件**，他们是按顺序调用的
 
 
 
+### 4. 中间件的分类
+
+#### 1）应用级别的中间件
+
+通过`app.use()`、`app.get()`或`app.post()`，**绑定到app实例上**的中间件，叫做应用级别的中间件。
+
+#### 2）路由级别的中间件
+
+**绑定到`express.Router()`实例**上的中间件，叫做路由级别的中间件，用法和应用级别的中间件没有任何区别
+
+#### 3）错误级别的中间件
+
+> 专门用来捕获整个项目中发生的异常错误，从而防止项目异常崩溃的问题。
+
++ 格式：错误级别中间件的function处理函数中，必须有4个形参，形参顺序从前到后，分别是(err, req, res, next)。
+
+```js
+app.get('/', (req, res) => {
+	throw new Error('服务器内部发生了错误！');		// throw：抛出。抛出一个自定义错误
+	res.send('Home Page.');		// 遇到错误后不会再往下执行，也就是不会执行这里
+})
+
+app.use((err, req, res, next) => {
+	console.log('发生了错误' + err.message);		//在服务器打印错误消息
+	res.send('Error!' + err.message);			//向客户端响应错误相关的内容
+})
+```
+
+注意：错误级别的中间件，**必须注册在所有路由之后！**这样路由遇到错误的之后才能在后面找到错误级别的中间件。
+
+#### 4）Express内置的中间件
+
+1. express.static：快速托管静态资源的内置中间件，例如：HTML文件、图片、CSS样式等（无兼容性）
+
+2. express.json：解析JSON格式的请求体数据（有兼容性，仅在4.16.0+ 版本中可用）
+
+   + 在服务器，可以使用req.body这个属性，来接收客户端发送过来的请求体数据。
+   + 默认情况下，如果不配置解析表单数据的中间件，则req.body默认等于undefined
+   + **通过express.json()这个中间件，解析表单中的JSON格式的数据**
+
+   ```js
+   // 除了错误级别的中间件，其他的中间件，必须在路由之前进行配置
+   app.use(express.json());
+   
+   app.post('/user', (req, res) => {
+   	console.log(req.body);
+       res.send('ok');
+   })
+   ```
+
+3. express.unlencoded：解析URL-encoded格式的请求体数据（有兼容性，仅在4.16.0+ 版本中可用）
+
+   > 先知道有这样一个中间件，有空去看看
+
+#### 5）第三方的中间件
+
+> 和npm包类似
 
 
+
+## 基于Express写接口
+
+### 1. 创建API路由模块
+
++ apiRouter.js
+
+```js
+const express = require('express');
+const router = express.Router();
+
+// 在这里写挂载路由，包括路由中间件啥的
+// router.get('/', (req, res)=>{
+//	  blabla....
+// });
+
+module.exports = router
+```
+
++ app.js 
+
+```js
+const express = require('express');
+const app = express();
+
+const router = require('./apiRouter');
+app.use('/api',router);		// 第一个参数 /api 表明访问路由的时候要在前面加 /api 前缀
+
+app.listen('80', () => {
+	console.log('express server running at http://127.0.0.1');
+})
+```
+
+### 2. 编写GET接口
+
++ apiRouter.js
+
+```js
+const express = require('express');
+const router = express.Router();
+
+// 在这里写挂载路由，包括路由中间件啥的
+router.get('/get', (req, res) => {
+	const query = req.query;//客户端的查询字符串
+	res.send({
+		status: 0,
+		msg: 'GET请求成功',
+		data: query
+	})
+})
+
+module.exports = router;
+```
+
++ app.js不变
+
+### 3. 编写POST接口
+
++ apiRouter.js
+
+```js
+const express = require('express');
+const router = express.Router();
+
+// 在这里写挂载路由，包括路由中间件啥的
+router.get('/get', (req, res) => {
+//	获取客户端通过查询字符串发送到服务器的数据
+	const query = req.query;//客户端的查询字符串
+	res.send({
+		status: 0,
+		msg: 'GET请求成功',
+		data: query
+	})
+})
+router.post('/post', (req, res) => {
+//	获取客户端通过请求体发送到服务器的 URL-encoded 数据
+	const body = req.body;
+	res.send({
+		status: 0,
+		msg:'POST请求成功！',
+		data: body
+	})
+})
+
+
+module.exports = router;
+```
+
++ app.js（配置中间件 `app.use(express.urlencoded({ extended: false })`）
+
+```js
+const express = require('express');
+const app = express();
+
+app.use(express.urlencoded({ extended: false }));
+
+const router = require('./apiRouter');
+app.use('/api',router);		// 第一个参数 /api 表明访问路由的时候要在前面加 /api 前缀
+
+app.listen('80', () => {
+	console.log('express server running at http://127.0.0.1');
+})
+```
 
 
 
