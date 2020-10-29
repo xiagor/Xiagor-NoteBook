@@ -1,5 +1,3 @@
-## 前端春招秋招冲冲冲！
-
 ### 学习总计划
 
 1. 系统学习时间：6h
@@ -16,7 +14,7 @@
 + [`CSS`](./CSS3.md)
   + 基础阶段：100%
   + CSS3新特性：大致都了解了一下，还没记住
-+ [`JavaScript`](./JavaScript/JavaScript笔记.md)
++ [JavaScript笔记](./JavaScript/JavaScript笔记.md) 、[JavaScript基础](.\JavaScript\JavaScript基础.md) 
   + 基础阶段：20%
   + 补充了一些零散比较深入的知识
 + [`JQuery`](./JavaScript/JQuery.md)
@@ -42,7 +40,7 @@
 + [计算机网络基础和浏览器](./浏览器和计网.md)
   + `http`：60%（在看图解HTTP）
   + [从输入URL到页面加载的过程？如何由一道题完善自己的前端知识体系！](https://segmentfault.com/a/1190000013662126) 
-    + 从浏览器接收url到开启网络请求线程：50%（刚学完浏览器的多进程和内核的多线程，需要加快进度，有些东西不能挖太深）
+    + 浏览器的多进程和内核的多线程
   + 安全：
     + 正在学习CSRF和XSS（这两个是主要的，还有一些其他的知识点）
     + cookie和session机制
@@ -52,7 +50,43 @@
 
 
 
+### 面试遇到的问题（快速解决并熟背）
 
+- [ ] flex弹性布局的使用
+
+- [ ] table布局
+
+- [ ] git操作，包括如何撤销git提交，git新建一个分支，处理冲突后的git操作
+
+- [ ] 快速排序的原理及代码实现 
+
+  https://blog.csdn.net/weixin_40836227/article/details/100047555  
+
+  http://www.ruanyifeng.com/blog/2011/04/quicksort_in_javascript.html
+
+- [ ] 跨域Ajax（和xhr有关）函数的封装
+
+- [ ] bfc是啥？
+
+- [ ] vue的watch怎么监听对象的某个属性
+
+- [ ] MVVM
+
+- [ ] js实现多继承
+
+- [ ] CSS多列等高
+
+- [ ] Vue-router
+
+- [ ] proxy
+
+- [ ] vue3.0的新特性
+
+- [ ] vue常见指令
+
+- [ ] vue生命周期
+
+- [ ] vuex https://segmentfault.com/a/1190000019077663 
 
 
 
