@@ -96,6 +96,8 @@
 
 2. computed是计算属性，事实上**使用起来**和data对象里的数据属性是一样的。
 
+   > 根据依赖关系进行缓存的计算，并且只在需要的时候进行更新。
+
 3. watch：类似监听机制+事件机制。
 
    ```js
@@ -124,15 +126,48 @@
 
     > 比如购物车的东西增删都会影响最后的总价total
 
-  + （个人理解）watch的键可以看作触发条件（键也就是数据发生变化，对应的事件就会被触发）；而computed的键和data的数据属性类似，可以直接引用。
+  + （个人理解）watch的键可以看作触发条件（键（数据）发生变化，对应的事件就会被触发）；而computed的键和data的数据属性类似，可以直接引用。
 
-    > 简单的理解就是watch的键应该要在data对象或者computed对象中存在？
+    > ~~简单的理解就是watch的键应该要在data对象或者computed对象中存在先？~~
 
 
 
-### computed计算属性
+## watch监听一个对象的属性或者监听整个对象
 
-> 根据依赖关系进行缓存的计算，并且只在需要的时候进行更新。
++ total是监听data的一个普通属性
++ `userInfor.name`是监听一个对象的属性，用字符串的形式即可
++ `userInfo`是监听一个对象，该值也是一个对象，其中
+  + handler函数是被触发的函数
+  + deep属性需要设置为true（深度监听）
+
+```js
+watch: {
+    total: function (val, oldVal) {
+    	console.log(val + ' ' + oldVal);
+    },
+    'userInfo.name': function (val, oldVal) {
+    	console.log(val);
+    },
+    userInfo: {
+        handler(val, oldVal) {
+        	console.log(val);
+        },
+        deep: true
+    }
+},
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -72,7 +72,7 @@
 
 - [ ] bfc是啥？
 
-- [ ] vue的watch怎么监听对象的某个属性
+- [x] vue的watch怎么监听对象的某个属性
 
 - [x] MVVM
 
@@ -92,13 +92,13 @@
 
 - [ ] vuex https://segmentfault.com/a/1190000019077663 
 
-- [ ] 元素设置为透明的几种方法
+- [x] 元素设置为透明的几种方法
 
 - [ ] Promise.all手写实现代码
 
 - [ ] 立即执行函数和闭包
 
-- [ ] rem、px、em的区别
+- [x] rem、px、em的区别
 
 - [x] HTML5几个语义化的标签及优点
 
@@ -106,17 +106,21 @@
 
 - [ ] CSS3动画animation和transition的区别？
 
-- [ ] get和post请求的区别
+- [x] get和post请求的区别
 
 - [ ] CORS
 
 - [ ] 简述HTTP控制访问CORS的理解
 
-- [ ] 节流和防抖的代码
+- [x] 节流和防抖的代码
 
 - [ ] WebSocket
 
 - [ ] 数组去重的方法记个五种或以上
+
+- [ ] MVC，MVP 和 MVVM的区别
+
+- [ ] 
 
 
 
