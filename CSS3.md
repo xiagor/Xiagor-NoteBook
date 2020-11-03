@@ -561,3 +561,19 @@ div{
    + opacity：元素的透明度，占位隐藏
 4. 设置盒子的width和height为0，再设置`overflow:hidden`
 5. 通过`position: absolute`，再设置top和left足够大的负数，把元素放到可视区域外
+
+
+
+## BFC
+
+> Block formatting context，块级格式上下文，是用于**布局块级盒子的一块渲染区域**。并且与这个区域的外部毫无关系。
+
+BFC是CSS的一个布局概念，是一个**独立的区域**，是一个环境。
+
++ 触发BFC的条件
+  1. float的值不为none
+  2. overflow的值不为visible
+  3. display的值为inline-block、inline-flex、flex、flow-root、table-caption、table-cell
+  4. position的值为absolute或者fixed
++ BFC的作用
+  + 

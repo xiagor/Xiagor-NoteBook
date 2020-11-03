@@ -823,13 +823,358 @@ return obj;
 
 
 
+## 立即执行函数
+
+> 在红宝书中的定义：**立即调用的匿名函数**又被称做立即调用的函数表达式（IIFE）。
+>
+> 它类似于函数声明，但由于被包含在括号中，所以会被解释为函数表达式。紧跟在第一组括号后面的第二组括号会立即调用前面的函数表达式。
+
++ 在ECMAScript5.1及以前，为了防止变量定义外泄，IIFE是个非常有效的方法，在ES6以后，IIFE就没那么必要了，因为let就可以实现同样的隔离。给一个例子：
+    ```js
+    let divs = document.querySelectorAll('div');
+    
+    //达不到目的！每次点击都是输出divs.length的值而不是对应的i
+    for(var i = 0; i < divs.length; ++i){
+        divs[i].addEventListener('click', function(){
+            console.log(i);
+        });
+    }
+    ```
+
++ IIFE的写法：
+
+    ```js
+    let divs = document.querySelectorAll('div');
+    
+    for (var i = 0; i < divs.length; ++i) {
+        // 里面的方法放入一个匿名函数中并且立即调用，这样相当于for循环的每个匿名函数都对应一个i（给匿名函数传参传进去的），类似块级作用域
+        (function (i) {
+            divs[i].addEventListener('click', function () {
+                console.log(i);
+            });
+        })(i);
+    }
+    ```
+
++ ES6的let写法 ：（很简单）
+    ```js
+    let divs = document.querySelectorAll('div');
+
+    for (let i = 0; i < divs.length; ++i) {
+        divs[i].addEventListener('click', function () {
+            console.log(i);
+        });
+    }
+    ```
+
+所以总的来看：
+
+1. 立即执行函数一般都是匿名函数的立即调用，具体使用方法可以看上面的例子。
+
+2. 立即执行函数是ES6的let之前的实现方法，但是很麻烦。
+
+3. 立即执行函数和闭包没有半毛钱关系，要说有关系的话，那就是立即执行函数用的是匿名函数，而闭包一般返回的函数也是匿名函数
+
+   ```js
+   // 匿名函数的形式
+   function (){
+   	//....上面没有函数名
+   } 
+   ```
+
+   
+
+## 回调地狱及解决方法
+
+> 前端的ajax和jsonp内部充斥着大量的异步，为了能够拿到异步的数据，使用了大量的回调函数，来获取将来异步执行成功之后的数据。如果请求不多时还好，一旦请求的数量达到一定程度，并且复杂度提升以后，会造成一些问题，这就是回调地狱。
+
+```js
+//开启三个异步的程序，要求能同时拿到所有异步的结果，下边就是用回调地狱方式解决的例子
+ ajax({
+     url:"http://localhost/promise/data/d1.php",
+     success:function(res1){
+         console.log(res1);
+         ajax({
+             url:"http://localhost/promise/data/d2.php",
+             success:function(res2){
+                 console.log(res2);
+                 ajax({
+                   url:"http://localhost/promise/data/d3.php",
+                    success:function(res3){
+                       console.log(res3);
+                       console.log(res1, res2, res3);
+                     }
+                 })
+             }
+         })
+     }
+ })
+
+```
+
+### 1. 回调地狱的缺点
+
++ 上边的例子用回调地狱能解决问题，但是有缺点，或者说不优雅。
++ 如果最里面的异步没有执行结束，外面所有的程序是不是都相当于没有结束，有点递归的影子，非常消耗性能。
++ 格式非常不优雅，语义化非常差，不方便调错。
+
+### 2. 回调地狱的解决方法
+
+#### 1）Promise解决（ES6）
+
+```js
+// Promise的格式
+var p = new Promise(function(a,b){
+	// 正在执行....
+	// 此处放置异步的程序
+	// a就是在then中的第一个回调函数，表示成功要做的事情
+	// b就是在catch中的第一个回调函数，表示失败要做的事情
+});
+p.then(function(){
+	// 成功的预置函数
+});
+p.catch(function(){
+	// 失败的预置函数
+});
+```
+
++ 用Promise和ajax解决回调地狱：
+
+    ```js
+     var p1 = new Promise(function(resolve){
+         ajax({
+             url:"http://localhost/promise/data/d1.php",
+             success:function(res1){
+                 resolve(res1);
+             }
+         })
+     })
+     var p2 = new Promise(function(resolve){
+         ajax({
+             url:"http://localhost/promise/data/d2.php",
+             success:function(res2){
+                 resolve(res2);
+             }
+         })
+     })
+     var p3 = new Promise(function(resolve){
+         ajax({
+             url:"http://localhost/promise/data/d3.php",
+             success:function(res3){
+                 resolve(res3);
+             }
+         })
+     })
+
+     p1.then(function(r1){
+         console.log(r1);
+         return p2;
+     }).then(function(r2){
+         console.log(r2);
+         return p3;
+     }).then(function(r3){
+         console.log(r3);
+     }
+    ```
+    
++ promise的封装
+
+    ```js
+    // ajax函数自身执行的时候不再接收成功和失败的处理函数了
+    // 交给ajax内部封装的promise处理
+    function ajax(ops){
+        ops.type = ops.type || "get";
+        ops.data = ops.data || {};
+        var str = "";
+        for(var key in ops.data){
+            str += `${key}=${ops.data[key]}&`;
+        }
+        if(ops.type=="get"){
+            let t = new Date().getTime();
+            ops.url = ops.url + "?" + str + "__qft="+ t;
+        }
+        var xhr = new XMLHttpRequest();
+        xhr.open(ops.type, ops.url);
+        if(ops.type == "get"){
+            xhr.send();
+        }else{
+            xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+            xhr.send(ops.data);
+        }
+        return new Promise(function(resolve,reject){
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState === 4 && xhr.status === 200){
+                    resolve(xhr.responseText);
+                }else if(xhr.readyState === 4 && xhr.status !== 200){
+                    reject("当前请求失败了，失败的原因是：" + xhr.status);
+                }
+            }
+        })
+    }
+    ```
+
++ 当前ajax封装完成之后的调用方式
+
+    ```js
+    // 当前ajax封装完成之后的调用方式：
+     var p1 = ajax({
+         type:"get",
+         url:"",
+         data:{
+             user:"admin",
+             pass:123
+         }
+     })
+     p1.then(function(res){
+         console.log(res)
+     })
+     p1.catch(function(res){
+         console.log(res)
+     })
+    ```
+
+    
+
+#### 2）async/await解决（ES7）
+
++ 在Promise的基础上，再使用async/await
+
+  ```js
+  //语法
+  async function fn(){
+    var res1 = await new Promise(....)
+  
+    var res2 = await new Promise(....)
+  
+    var res3 = await new Promise(....)
+  
+    var res4 = await new Promise(....)
+  
+    console.log(res1,res2,res3,res4);
+   }
+  ```
+
++ async/await解决地狱回调
+
+  ```js
+      async function fn(abc){
+          var p1 = await ajax({
+              url:"http://localhost/async-await/data/d1.php"
+          });
+          
+          var p2 = await ajax({
+              url:"http://localhost/async-await/data/d12312.php"
+          });
+  
+          var p3 = await ajax({
+              url:"http://localhost/async-await/data/d3.php"
+          });
+          
+          var p3 = await ajax({
+              url:"http://localhost/async-await/data/d3.php"
+          });
+          
+          var p3 = await ajax({
+              url:"http://localhost/async-await/data/d3.php"
+          });
+  
+          console.log(p1, p2, p3);
+  
+          console.log(abc);
+      }
+  
+      document.onclick = function(){
+          fn("hello world");
+      }
+  ```
+
+
+
+#### 3）generator
+
++ generator是es6中的一个新的语法。在function关键字后添加*即可将函数变为generator。
+
++ generator函数有一个最大的特点，可以在内部执行的过程中交出程序的控制权，yield相当于起到了一个暂停的作用；而当一定情况下，外部又将控制权再移交回来。
+
++ 用generator来封装代码，在异步任务处使用yield关键词，此时generator会将程序执行权交给其他代码，而在异步任务完成后，调用next方法来恢复yield下方代码的执行。
+
++ 以readFile为例，大致流程如下：
+
+  ```js
+  // 我们的主任务——显示关键字// 使用yield暂时中断下方代码执行// yield后面为promise对象
+  const showKeyword = function* (filepath) {
+      console.log('开始读取');
+      let keyword = yield readFile(filepath);
+      console.log(`关键字为${filepath}`);
+  }
+  // generator的流程控制
+  let gen = showKeyword();
+  let res = gen.next();
+  res.value.then(res => gen.next(res));
+  ```
 
 
 
 
+## 一、正则表达式字符匹配
+
+> 正则表达式是匹配模式，要么匹配字符、要么匹配位置。
+
+### 1. 两种模糊匹配
+
+#### 1）横向模糊匹配
+
+> 横向模糊指的是，一个正则可匹配的字符串的长度不是固定的，可以是多种情况的。
+
++ 实现方式：使用量词，譬如`{m,n}`，表示连续出现最少m次，最多n次
+
+```js
+var regex = /ab{2,5}c/g;
+var string = "abc abbc abbbc abbbbc abbbbbc abbbbbbc";
+console.log( string.match(regex) ); 
+// => ["abbc", "abbbc", "abbbbc", "abbbbbc"]
+```
+
+#### 2）纵向模糊匹配
+
+> 纵向模糊指的是，一个正则匹配的字符串，具体到某一位字符时，它可以不是某个确定的字符，可以有多种可能。
+
++ 实现方式：使用字符组，譬如`[abc]`，表示该字符可以是"a","b","c"中的任意一个。
+
+```js
+var regex = /a[123]b/g;
+var string = "a0b a1b a2b a3b a4b";
+console.log( string.match(regex) ); 
+// => ["a1b", "a2b", "a3b"]
+```
 
 
 
+### 2. 字符组
+
+> 虽然叫字符组，但只是其中一个字符，例如`[abc]`，**表示匹配一个字符**，可以是"a","b","c"中的任意一个。
+
+1. 范围表示法
+
+   用连字符 - 来省略和简写，如`[a-z]`
+
+   如果要匹配连字符 - ，可以转义`\-`
+
+2. 排除字符组
+
+   求反，如`[^abc]`，除了a、b、c的任何一个字符
+
+3. 常见的简写形式
+
+   | 简写形式 | 字符组形式            | 表示                                                         | 英文写法        |
+   | -------- | --------------------- | ------------------------------------------------------------ | --------------- |
+   | `\d`     | `[0-9]`               | 一位数字                                                     | **d**igit       |
+   | `\D`     | `[^0-9]`              | 除了数字以外的任意字符                                       |                 |
+   | `\w`     | `[0-9a-zA-Z_]`        | 数字、大小写字母和下划线                                     | **w**ord        |
+   | `\W`     | `[^0-9a-zA-Z_]`       |                                                              |                 |
+   | `\s`     | `[ \t\v\r\n\f]`       | 空格、水平制表符、垂直制表符、回车符、换行符、换页符         | space character |
+   | `\S`     | `[^ \t\v\r\n\f]`      |                                                              |                 |
+   | `.`      | `[^\n\r\u2028\u2029]` | 通配符，表示几乎任意字符。换行符、回车符、行分隔符和段分隔符除外。 |                 |
 
 
 
