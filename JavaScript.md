@@ -679,35 +679,19 @@ console.log(matches2);
 + 返回值
   + 一个替换好的新的字符串
 
+#### 4）split()
 
+```js
+str.split([separator[, limit]])
+```
 
++ separator：指定表示每个拆分应发生的点的字符串。`separator` 可以是一个字符串或[正则表达式](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/RegExp)。
 
+  如果在str中省略或不出现分隔符，则返回的数组包含一个由整个字符串组成的元素。
 
+  如果分隔符为空字符串，则将str原字符串中**每个字符**的数组形式返回。（就是每个字符都被分开了）
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
++ limit：一个整数，限定返回的分割片段数量。
 
 
 
@@ -1116,7 +1100,7 @@ p.catch(function(){
 
 
 
-## 一、正则表达式字符匹配
+## 正则表达式字符匹配
 
 > 正则表达式是匹配模式，要么匹配字符、要么匹配位置。
 
@@ -1180,9 +1164,220 @@ console.log( string.match(regex) );
 
 
 
+## js数组去重的方法
+
+### 测试代码：
+
+```js
+let arr1 = [3, 1, [1], 1, [1], true, true, {}, '1', NaN, undefined, NaN, undefined, {}, null, null];	
+let arr2 = [];
+for (let i = 0; i < 100000; i++) {
+    arr2.push(0 + Math.floor((100000 - 0 + 1) * Math.random()));
+}
+
+//function unique(arr) {
+//    //...
+//}
+// 封装在Array的原型对象会更好，this就是指向调用该方法的数组
+Array.prototype.unique = function () {
+    //...
+}
+
+console.log(arr1.unique());	// 测试去重效果
+console.time('test');
+console.log(arr2.unique());	// 测试去重时间
+console.timeEnd('test');
+```
 
 
 
+### 1. forEach + indexOf
+
+```js
+Array.prototype.unique = function () {
+    let newArr = [];
+    this.forEach((item) => {
+        if (newArr.indexOf(item) === -1) {
+            newArr.push(item);
+        }
+    })
+    return newArr;
+}
+```
+
++ test: 4104.52294921875 ms
+
+> 不能去除重复的NaN和复杂数据类型（比如 Object 和 Array ）
+>
+> + 原因：indexOf 认为 NaN 不等于 NaN 
+
+
+
+### 2. filter + indexOf
+
+```js
+Array.prototype.unique = function () {
+    return this.filter((item, index) => {
+        // 利用indexOf检测元素在数组中第一次出现的位置是否和元素现在的位置相等，如果不等则说明该元素是重复元素
+        return this.indexOf(item) === index;
+    })
+}
+```
+
++ test: 5682.358154296875 ms
+
+> 不能去掉重复的复杂数据类型，同时还会去掉所有的NaN
+>
+> + 原因：indexOf 认为 NaN 不等于 NaN 
+
+
+
+### 3. forEach + includes
+
+```js
+Array.prototype.unique = function () {
+    let newArr = [];
+    this.forEach((item) => {
+        if (!newArr.includes(item)) {
+            newArr.push(item);
+        }
+    })
+    return newArr;
+}
+```
+
++ 4181.393798828125 ms
+
+> 可以去掉重复的NaN，但是不能去掉重复的复杂数据类型
+>
+> + includes 认为 NaN === NaN 为 true
+
+
+
+### 4. for + sort（sort有问题）
+
+```
+Array.prototype.unique = function () {
+    let newArr = [];
+    this.sort();
+    for (let i = 0; i < this.length; i++) {
+        if (this[i] !== this[i + 1]) {
+            newArr.push(this[i]);
+        }
+    }
+    return newArr;
+}
+```
+
++ test: 61.96484375 ms
+
+> 带 sort 方法的只对**纯number或者纯string类型**有效，它无法区分1和'1'，因为它是在将元素转换为字符串，然后比较它们的UTF-16代码单元值序列时构建的。
+>
+> 这时候如果有一段这样的排序[1, '1', 1]，再用前后比较的方法去重就会出现问题
+
+> 同样它不能去重NaN和复杂数据类型
+
+
+
+### 5. sort + reduce（sort有问题）
+
+```js
+Array.prototype.unique = function () {
+    return this.sort().reduce((init, cur) => {
+        if (init.length === 0 || init[init.length - 1] !== cur) {
+            init.push(cur);
+        }
+        return init;
+    }, []);
+}
+```
+
++ test: 66.679931640625 ms
+
+> 同样他也是用sort排序再前后比较，也是傻逼玩意
+
+> 同样也不能去重NaN和复杂数组类型
+
+
+
+### 6. 两种for循环 + splice（耗时最长）
+
+```js
+Array.prototype.unique = function () {
+    for (let i = 0; i < this.length; i++) {
+        for (let j = i + 1; j < this.length; j++) {
+            if (this[i] === this[j]) {
+                this.splice(j, 1);
+                j--;
+            }
+        }
+    }
+    return this;
+}
+```
+
++ test: 21208.31396484375 ms
+
+> 不能去重NaN和复杂数组类型
+
+
+
+### 7. forEach + map
+
+```js
+Array.prototype.unique = function () {
+    let map = new Map();
+    let newArr = new Array();
+    this.forEach((item) => {
+        if (!map.has(item)) {
+            map.set(item, 1);
+            newArr.push(item);
+        }
+    });
+    return newArr;
+}
+```
+
++ test: 27.030029296875 ms
+
+> 可以去NaN，不能去重复杂数组类型
+
+
+
+### 8. Set
+
+```js
+Array.prototype.unique = function () {
+    // return Array.from(new Set(this));
+    return [...new Set(this)];
+}
+```
+
++ test: 31.197021484375 ms
+
+> 可以去掉重复的NaN，但是不能去掉重复的复杂数据类型
+
+
+
+### 9. filter +  hasOwnProperty + JSON.stringify（自认为目前最好的方法！）
+
+```js
+Array.prototype.unique = function () {
+    let obj = {};
+    return this.filter(function (item, index, arr) {
+        return obj.hasOwnProperty(typeof item + JSON.stringify(item)) ? false : (obj[typeof item + JSON.stringify(item)] = true);
+    });
+}
+```
+
++ test: 126.3359375 ms
+
+> 可以去掉**重复的NaN和重复的复杂数据类型**
+>
+> 在object中，key如果是number类型，它会自动转换成string类型，所以{1:1}和{"1":1}是相等的，这不是这个方法的缺陷，这是obj的缺陷
+
++ 该方法的核心：以`typeof item`元素类型+`item`的字符串作为key
++ 考虑到obj的字符串都为'[object Object]'，这里使用JSON.stringify(item)，就可以**保存不同的obj字符串**
 
 
 
