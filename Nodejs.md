@@ -1,3 +1,5 @@
+## 目录
+
 [TOC]
 
 
@@ -268,6 +270,10 @@ module.exports = {
 ```
 
 ## 模块的加载机制
+
+一张图：
+
+![img](Images/Nodejs/nodejs-require.jpg)
 
 ### 1. 优先从缓存中加载
 

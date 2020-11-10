@@ -1,4 +1,6 @@
-[TOC]
+## 目录
+
+[toc]
 
 
 
@@ -6,13 +8,13 @@
 
 >  HTML：Hyper Text Markup Language，超文本标记语言
 
-### 1. 语义化标签
+### 语义化标签
 
 `<header><article><footer><nav><aside><section>`
 
 ![img](Images/HTML5/15827882-4057d561069e7a15.png)
 
-### 2. 增强型表单
+### 增强型表单
 
 + **新的 form 属性：**
   + autocomplete
@@ -118,9 +120,9 @@
   + placeholder
   + required
 
-### 3. 新增video和audio标签
+### 新增video和audio标签
 
-### 4. 添加了canvas画布和svg，渲染矢量图片
+### 添加了canvas画布和svg，渲染矢量图片
 
 + **canvas：画线、画圆、渐变、添加图像到画布（通过js绘制2D图形）**
   + 依赖分辨率
@@ -135,18 +137,18 @@
   + 复杂度高会减慢渲染速度（任何过度使用 DOM 的应用都不快）
   + 不适合游戏应用
 
-### 5. 地理定位
+### 地理定位
 
 ​	navigator对象里面有geolocation对象，其中有getCurrentPosition方法，可以获取地理的定位
 
-### 6. 拖放API
+### 拖放API
 
 拖（Drag）和放（drop），需要设置
 
 + 可拖动属性`draggable="true"`、
 + 拖放触发事件的属性`ondrop="drop(event)"`、`ondragstart="drag(event)"`、`ondragover="allowDrop(event)"`
 
-### 7. Web Workers
+### Web Workers
 
 当在HTML页面中执行脚本时，页面的状态时不可响应的，直到脚本已完成
 
@@ -213,7 +215,7 @@ Web Worker是运行在后台的JavaScript，独立于其他脚本，不会影响
 
    
 
-### 8. Web 存储
+### Web 存储
 
 在客户端存储数据的新方法：
 
@@ -222,13 +224,13 @@ Web Worker是运行在后台的JavaScript，独立于其他脚本，不会影响
 
 
 
-### 9. 应用程序缓存
+### 应用程序缓存
 
 通过创建cache manifest文件，可以轻松创建web应用的离线版本。
 
 
 
-### 10. 服务器发送事件SSE
+### 服务器发送事件SSE
 
 网页自动获取来自服务器的更新。
 
@@ -250,14 +252,14 @@ source.onmessage=function(event)
 
 ## HTML文档结构
 
-### 1. 文档类型声明
+### 文档类型声明
 
 > 用来说明该文档是html类型
 
 + HTML5：`<!DOCTYPE html>`
 + HTML4.01（了解）：`<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">`
 
-### 2. html标签对
+### html标签对
 
 > 标识文档的开始和结束，该标签有两个属性dir和lang
 
@@ -318,32 +320,32 @@ source.onmessage=function(event)
 
 ### 标准模式和怪异模式的区别
 
-#### 1. width不同
+#### width不同
 
 + 标准模式：width是内容content的宽度，而盒子的宽度是width+padding+border+margin
 + 怪异模式：width是content+padding+border的宽度，而盒子的宽度是width+margin
 
-#### 2.内联元素的尺寸
+#### 内联元素的尺寸
 
 + 标准模式：给span等行内 元素设置width和height不生效
 + 怪异模式：给行内元素设置则会生效
 
-#### 3. 块级元素水平居中
+#### 块级元素水平居中
 
 + 标准模式：`margin: 0 auto;`可以使元素水平居中
 + 怪异模式：t`ext-align: center`（这是标准模式对行内元素和行内块实现水平居中的方法）
 
-#### 4. 图片的padding
+#### 图片的padding
 
 + 标准模式：可以设置img的padding
 + 怪异模式：img的padding值失效
 
-#### 5. 元素溢出的处理
+#### 元素溢出的处理
 
 + 标准模式：当内容溢出元素框时，overflow默认为visible，即内容不会被修剪，会呈现在元素框之外。
 + 怪异模式：溢出会被当做扩展box来对待，溢出不会裁减，元素框自动调整大小，能够包含溢出内容。（盒子自己变大）
 
-#### 6. 元素的百分比高度
+#### 元素的百分比高度
 
 + 标准模式：
   1. 父不设置高度条件下，父随子变化，由子的内容决定高度（此时子元素高度设置百分比无效）
@@ -375,7 +377,7 @@ source.onmessage=function(event)
 
 ## HTML5语义化标签及优点
 
-### 1. 几个常用的
+### 几个常用的
 
 - < header >：网页头部，通常包括网站标志、主导航、全站链接以及搜索框。
 - < footer >：网页尾部
@@ -386,7 +388,7 @@ source.onmessage=function(event)
 - < aside >：定义其所处内容之外的内容。如侧栏、文章的一组链接、广告、友情链接、相关产品列表等
 - < address >：作者、相关人士或组织的联系信息（电子邮件地址、指向联系信息页的链接）
 
-### 2. 语义化标签的优点
+### 语义化标签的优点
 
 + HTML结构清晰
 + 代码可读性好
