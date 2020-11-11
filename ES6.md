@@ -1,6 +1,13 @@
 ## 目录
 
-[TOC]
+<!-- TOC -->
+
+- [目录](#目录)
+- [export和export  default](#export和export-default)
+- [箭头函数](#箭头函数)
+- [数组和对象的解构赋值](#数组和对象的解构赋值)
+
+<!-- /TOC -->
 
 
 
