@@ -1,17 +1,17 @@
-### 目录
+## 目录
 
 [TOC]
 
 
 
-### 学习总计划
+## 学习总计划
 
 1. 系统学习时间：6h
 3. 刷leetcode算法一题到两题：2h
 
 
 
-### 目前进度
+## 目前进度
 
 + [HTML5](./HTML5.md) 
   + 进度：70%
@@ -56,7 +56,7 @@
 
 
 
-### 面试笔试遇到的问题（快速解决并熟背）
+## 面试笔试遇到的问题（快速解决并熟背）
 
 - [x] flex弹性布局的使用
 
@@ -124,16 +124,100 @@
 
 
 
-### 面试常见问题：
+## 面试常见问题：
 
-#### 1. 你是怎么学习前端的：
+### 1. 你是怎么学习前端的
 
-```html
 一开始是通过网上的一些视频和文章入门，后来发现他们讲的东西只是一个入门而已。
 于是就买了前端的各种书籍来看，同时也会留意各种博文和公众号，留意前端方面的一些变化。
 遇到不懂的或者是新的知识，就会列入清单去学习，通过MDN或者书籍去查找资料，努力去理解这块知识等等。
 同时也慢慢的形成一块知识网，努力把自己所学的东西就能联系起来。但现在学的还不够，这块知识网也是很多缺漏什么的。
-```
+
+
+
+### 2. 印象最深刻的项目
+
+#### 1）该项目是干什么的
+
+我们负责的项目是我家云SaaS系统。
+主要是为企业搭建信息化所需要的所有网络基础设施及软件、硬件运作平台，并负责所有前期的实施、后期的维护等一系列服务。
+我们将应用软件统一部署在自己的服务器上，企业可以根据实际需求购买所需的应用软件服务，并在服务时间内根据客户的需求提供云解决方案。
+
+> 如果不问具体就不往下说了：
+>
+> 其中包括了物业web端、管家app端、我家app端，分别使用的对象有整个企业、企业下的各物业、物业下的商户
+
+#### 2）该项目中做的难点
+
+实习过程中，突然有一个任务要求，显示企业下的物业楼栋位置，而当时我是没有接触过地图的，而且要求一周上线。
+
+当时找到了vue-baidu-map这个基于vue2.x的百度地图组件，在问过导师该组件安全性的情况下我是使用了这个组件去开发的。它也提供了文档，根据文档确定能满足业务需求后就决定使用这个组件，并结合百度地图的API文档进行开发。
+
+其中印象比较深刻的是有个需求要根据所有楼栋的位置去自动适配地图的缩放大小等级，我当时的想法是去计算上下左右最边缘的经纬度再去计算合适的地图缩放等级，后来发现百度地图有提供相关的API了，就利用了这个API（`getViewport`）去做适配
+
+任务开发完成之后我觉得其实开发难度不是很大，我觉得难在如何短时间内去开发完成自己没接触过的东西。
+
+
+
+#### 3）使用到的技术点
+
+
+
+
+
+#### 4）性能优化
+
+1. 引入 CDN 资源，减少服务器带宽压力
+
+   ![image-20201110195501933](Images/README/image-20201110195501933.png)
+
+2. 按需加载第三方资源，如element-ui和vue-baidu-map的部分组件
+
+   ```js
+   import {BaiduMap,BmInfoWindow} from 'vue-baidu-map';
+   export default {
+       components:{
+           BaiduMap,
+           BmInfoWindow
+       }
+   }
+   ```
+
+   ```js
+   import { Button, Select } from 'element-ui';
+   Vue.use(Button);
+   Vue.use(Select);
+   ```
+
+3. 按需加载js文件（动态加载一个js文件，在加载成功之后执行回调）
+
+   具体代码实现在 [JavaScript.md](JavaScript.md) 中有
+
+   > + 以下的点都是自己没接触的，但是是项目中的性能优化（高性能的原因）
+   >
+   >  [解决vue首屏加载慢，白屏的问题](https://blog.csdn.net/wang729506596/article/details/82874330?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.compare&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.compare) 
+   >
+   >  [Vue 首屏加载速度优化-这篇就够了](https://blog.csdn.net/weixin_42604828/article/details/93324751?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-2.compare&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-2.compare) 
+
+4. 路由懒加载
+
+5. 开启gzip压缩
+
+6. 使用vue的服务端渲染ssr
+
+   ssr优点是seo优化，以及加快首屏加载 
+
+   关于ssr可以参考文档 [Nuxt.js](https://zh.nuxtjs.org/guide)
+
+7. 项目依赖优化
+
+
+
+
+
+
+
+
 
 
 

@@ -1469,44 +1469,360 @@ JSONP和AJAX相同，都是客户端向服务器发送请求，从服务器端�
 
 
 
-## Ajax
+## Ajax（XMLHttpRequest 对象）
 
-> AJAX是异步的JavaScript和XML（**A**synchronous **J**avaScript **A**nd **X**ML）。简单点说，就是使用XMLHttpRequest对象与服务器通信。
+> AJAX是异步的JavaScript和XML（**A**synchronous **J**avaScript **A**nd **X**ML）。简单点说，就是使用XMLHttpRequest对象与服务器通信。[参考MDN文档的XMLHttpRequest](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest) 
 
-1. `open('GET', 'http://www.example.org/some.file', true)`
 
-   + 参数一：HTTP请求方法 ——GET、POST、HEAD等（要求大写）
-   + 参数二：要发送的URL，由于安全原因，不能跨域发送。同源策略
-   + 参数三：（可选）设置请求是否异步，如果设为`true`（默认值），即开启异步，js就不会在此语句阻塞
 
-2. `send()`：该方法的参数可以是任何想发送给服务器的内容
+### 1. 构造函数
 
-   > 如果使用POST数据，那就需要在send之前设置MIME类型。比如：
-   >
-   > ```js
-   > httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-   > ```
+- [`XMLHttpRequest()`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/XMLHttpRequest)
+
+  该构造函数用于初始化一个 `XMLHttpRequest` 实例对象。在调用下列任何其他方法之前，必须先调用该构造函数，或通过其他方式，得到一个实例对象。
+
+
+
+### 2. 属性
+
+*此接口继承了 [`XMLHttpRequestEventTarget`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequestEventTarget) 和 [`EventTarget`](https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget) 的属性。*
+
+- [`XMLHttpRequest.onreadystatechange`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/onreadystatechange)
+
+  当 `readyState` 属性发生变化时，调用的 [`EventHandler`](https://developer.mozilla.org/zh-CN/docs/Web/API/EventHandler)。
+
+- [`XMLHttpRequest.readyState`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/readyState)  `只读`
+
+  返回 一个无符号短整型（`unsigned short`）数字，代表请求的状态码。
+
+- [`XMLHttpRequest.response`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/response) `只读`
+
+  返回一个 [`ArrayBuffer`](https://developer.mozilla.org/zh-CN/docs/Web/API/ArrayBuffer)、[`Blob`](https://developer.mozilla.org/zh-CN/docs/Web/API/Blob)、[`Document`](https://developer.mozilla.org/zh-CN/docs/Web/API/Document)，或 [`DOMString`](https://developer.mozilla.org/zh-CN/docs/Web/API/DOMString)，具体是哪种类型取决于 [`XMLHttpRequest.responseType`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/responseType) 的值。其中包含整个响应实体（response entity body）。
+
+- [`XMLHttpRequest.responseText`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/responseText) `只读`
+
+  返回一个 [`DOMString`](https://developer.mozilla.org/zh-CN/docs/Web/API/DOMString)，该 [`DOMString`](https://developer.mozilla.org/zh-CN/docs/Web/API/DOMString) 包含对请求的响应，如果请求未成功或尚未发送，则返回 `null`。
+
+- [`XMLHttpRequest.responseType`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/responseType)
+
+  一个用于定义响应类型的枚举值（enumerated value）。
+
+- [`XMLHttpRequest.responseURL`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/responseURL) `只读`
+
+  返回经过序列化（serialized）的响应 URL，如果该 URL 为空，则返回空字符串。
+
+- [`XMLHttpRequest.responseXML`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/responseXML) `只读`
+
+  返回一个 [`Document`](https://developer.mozilla.org/zh-CN/docs/Web/API/Document)，其中包含该请求的响应，如果请求未成功、尚未发送或时不能被解析为 XML 或 HTML，则返回 `null`。
+
+- [`XMLHttpRequest.status`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/status) `只读`
+
+  返回一个无符号短整型（`unsigned short`）数字，代表请求的响应状态。
+
+- [`XMLHttpRequest.statusText`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/statusText) `只读`
+
+  返回一个 [`DOMString`](https://developer.mozilla.org/zh-CN/docs/Web/API/DOMString)，其中包含 HTTP 服务器返回的响应状态。与 [`XMLHTTPRequest.status`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHTTPRequest/status) 不同的是，它包含完整的响应状态文本（例如，"`200 OK`"）。
+
+  > **注意：**根据 HTTP/2 规范（[8.1.2.4](https://http2.github.io/http2-spec/#rfc.section.8.1.2.4) [Response Pseudo-Header Fields](https://http2.github.io/http2-spec/#HttpResponse)，响应伪标头字段），HTTP/2 没有定义任何用于携带 HTTP/1.1 状态行中包含的版本（version）或者原因短语（reason phrase）的方法。
+
+- [`XMLHttpRequest.timeout`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/timeout)
+
+  一个无符号长整型（`unsigned long`）数字，表示该请求的最大请求时间（毫秒），若超出该时间，请求会自动终止。
+
+- [`XMLHttpRequestEventTarget.ontimeout`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequestEventTarget/ontimeout)
+
+  当请求超时调用的 [`EventHandler`](https://developer.mozilla.org/zh-CN/docs/Web/API/EventHandler)。
+
+- [`XMLHttpRequest.upload`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/upload) `只读`
+
+  [`XMLHttpRequestUpload`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequestUpload)，代表上传进度。
+
+- [`XMLHttpRequest.withCredentials`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/withCredentials)
+
+  一个[`布尔值`](https://developer.mozilla.org/zh-CN/docs/Web/API/Boolean)，用来指定跨域 `Access-Control` 请求是否应当带有授权信息，如 cookie 或授权 header 头。
+
+#### 事件处理器
+
+作为 `XMLHttpRequest` 实例的属性之一，所有浏览器都支持 `onreadystatechange`。
+
+后来，许多浏览器实现了一些额外的事件（`onload`、`onerror`、`onprogress` 等）。详见[Using XMLHttpRequest](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest)。
+
+更多现代浏览器，包括 Firefox，除了可以设置 `on*` 属性外，也提供标准的监听器 [`addEventListener()`](https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/addEventListener) API 来监听`XMLHttpRequest` 事件。
+
+
+
+### 3. 方法
+
+- [`XMLHttpRequest.abort()`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/abort)
+
+  如果请求已被发出，则立刻中止请求。
+
+- [`XMLHttpRequest.getAllResponseHeaders()`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/getAllResponseHeaders)
+
+  以字符串的形式返回所有用 [CRLF](https://developer.mozilla.org/zh-CN/docs/Glossary/CRLF) 分隔的响应头，如果没有收到响应，则返回 `null`。
+
+- [`XMLHttpRequest.getResponseHeader()`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/getResponseHeader)
+
+  返回包含指定响应头的字符串，如果响应尚未收到或响应中不存在该报头，则返回 `null`。
+
+- [`XMLHttpRequest.open()`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/open)
+
+  初始化一个请求。该方法只能在 JavaScript 代码中使用，若要在 native code 中初始化请求，请使用 [`openRequest()`](https://developer.mozilla.org/zh-CN/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXMLHttpRequest)。
+
+- [`XMLHttpRequest.overrideMimeType()`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/overrideMimeType)
+
+  覆写由服务器返回的 MIME 类型。
+
+- [`XMLHttpRequest.send()`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/send)
+
+  发送请求。如果请求是异步的（默认），那么该方法将在请求发送后立即返回。
+
+- [`XMLHttpRequest.setRequestHeader()`](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/setRequestHeader)
+
+  设置 HTTP 请求头的值。必须在 `open()` 之后、`send()` 之前调用 `setRequestHeader()` 方法。
+
+
+
+### 4. 手写Promise封装ajax
+
+```js
+// 取JSON格式的，需要后台返回JSON格式！
+function getJSON(url) {
+    return new Promise((resolve, reject) => {
+        let xhr = new XMLHttpRequest();
+        xhr.open('get', url, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState !== 4) {
+                return;
+            }
+            if (xhr.status == 200) {
+                resolve(xhr.response);
+            } else {
+                reject(new Error(xhr.statusText));
+            }
+        }
+        xhr.onerror = () => {
+            reject(new Error(xhr.statusText));
+        }
+        xhr.responseType = 'json';
+        xhr.setRequestHeader('Accept', 'application/json');
+        xhr.send(null);
+    });
+}
+getJSON('/bar')
+    .then((res) => {
+        console.log(res);
+    })
+    .catch((error) => {
+        console.log(error);
+    })
+```
+
+
+
+## js去除字符串空格的方法
+
+1. `str.trim()`
+
+   去掉字符串前后空格
    
-3. `readyState`状态值
+2. `str.trimStart()`
 
-   + 0 (未初始化) or (**请求还未初始化**)
-   + 1 (正在加载) or (**已建立****服务器链接**)
-   + 2 (加载成功) or (**请求已接受**)
-   + 3 (交互) or (**正在处理请求**)
-   + 4 (完成) or (**请求已完成并且响应已准备好**)
+   去掉字符串前面的空格
 
-4. `status`：HTTP响应的状态码
+3. `str.trimEnd()`
 
-> 在检查完请求状态和HTTP响应码后，就可以用服务器返回的data做任何想做的事情了。
+   去掉字符串后面的空格
 
+4. `str.replace(/\s/g, '')`
 
+   去掉 字符串中所有空格
 
 
 
+## 异步编程的实现方式
+
+### 1. 回调函数
+
+优点：简单、容易理解
+
+缺点：不利于维护、代码耦合度高（例如回调函数地狱）
 
 
 
+### 2. Promise对象
 
+优点：可以利用 then 方法，进行链式写法；可以书写错误时的回调函数
+
+缺点：多个then链式调用，可能会造成代码的语义不够明确
+
+
+
+### 3. Generator 函数
+
+优点：函数体内外的数据交换、错误处理机制。
+
+缺点：流程管理不方便。
+
+> 使用 generator 的方式，它可以在函数的执行过程中，将函数的执行权转移出去，在函数外部我们还可以将执行权转移回来。当我们遇到异步函数执行的时候，将函数执行权转移出去，当异步函数执行完毕的时候我们再将执行权给转移回来。
+>
+> 因此我们在 generator 内部对于异步操作的方式，可以以同步的顺序来书写。
+>
+> 使用这种方式我们需要考虑的问题是何时将函数的控制权转移回来，因此我们需要有一个自动执行 generator 的机制，比如说 co 模块等方式来实现 generator 的自动执行。
+
+
+
+### 4. async 函数
+
+优点：内置执行器，更好的语义，更广的适用性，返回的是Promise、结构清晰
+
+缺点：错误处理机制
+
+> 使用 async 函数的形式，async 函数是 generator 和 promise 实现的一个自动执行的语法糖，它内部自带执行器，当函数内部执行到一个 await 语句的时候，如果语句返回一个 promise 对象，那么函数将会等待 promise 对象的状态变为 resolve 后再继续向下执行。因此我们可以将异步逻辑，转化为同步的顺序来书写，并且这个函数可以自动执行。
+>
+> async函数内部**抛出的错误**会导致返回的Promise对象那个变为reject状态，抛出的错误对象会被catch方法回调函数接收到。（此时如果）
+>
+> 如果有多个await命令，其中一个await命令后面的异步操作失败（即Promise对象的运行结果是rejected），那后面的await语句将不再会执行。等同于整个async函数返回的Promise对象被reject。（这就是他的缺点）
+>
+> 解决办法可以使用try..catch结构，将可能失败的 await 命令放在 try 中并用 catch 捕捉错误，这样不管这个await是否失败，接着后面的 await 都能执行。或者直接在 await 后面的 Promise 对象后添加一个 catch 方法，处理前面可能出现的错误
+
+
+
+### 5. 事件监听（采用时间驱动模式，取决于某个事件是否可以发生）
+
+优点：容易理解，可以绑定多个事件，每个事件可以指定多个回调函数
+
+缺点：事件驱动型，流程不够清晰
+
+
+
+### 6. 发布/订阅（观察者模式）
+
+类似于事件监听，但是可以通过‘消息中心’，了解现在有多少发布者，多少订阅者
+
+
+
+### 面试答案
+
+```
+js 中的异步机制可以分为以下几种：
+
+第一种最常见的是使用回调函数的方式，使用回调函数的方式有一个缺点是，多个回调函数嵌套的时候会造成回调函数地狱，上下两层的回调函数间的代码耦合度太高，不利于代码的可维护。
+
+第二种是 Promise 的方式，使用 Promise 的方式可以将嵌套的回调函数作为链式调用。但是使用这种方法，有时会造成多个 then 的链式调用，可能会造成代码的语义不够明确。
+
+第三种是使用 generator 的方式，它可以在函数的执行过程中，将函数的执行权转移出去，在函数外部我们还可以将执行权转移回来。当我们遇到异步函数执行的时候，将函数执行权转移出去，当异步函数执行完毕的时候我们再将执行权给转移回来。因此我们在 generator 内部对于异步操作的方式，可以以同步的顺序来书写。使用这种方式我们需要考虑的问题是何时将函数的控制权转移回来，因此我们需要有一个自动执行 generator 的机制，比如说 co 模块等方式来实现 generator 的自动执行。
+
+第四种是使用 async 函数的形式，async 函数是 generator 和 promise 实现的一个自动执行的语法糖，它内部自带执行器，当函数内部执行到一个 await 语句的时候，如果语句返回一个 promise 对象，那么函数将会等待 promise 对象的状态变为 resolve 后再继续向下执行。因此我们可以将异步逻辑，转化为同步的顺序来书写，并且这个函数可以自动执行。
+```
+
+
+
+## Promise动态加载图片
+
+### 1. new Image()
+
+**`Image()`**函数将会创建一个新的[`HTMLImageElement`](https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLImageElement)实例。
+
+它的功能等价于 [`document.createElement('img') `](https://developer.mozilla.org/zh-CN/docs/Web/API/Document/createElement) 
+
+> new出来的实例添加了src后就会动态加载图片了。
+
+
+
+### 2. Promise实现代码
+
+```js
+function loadImageAsync(url) {
+    return new Promise((resolve, reject) => {
+        let image = new Image();
+        image.onload = function () {
+            resolve(image);
+        }
+        image.onerror = function () {
+            reject(new Error('Could not image at ' + url));
+        }
+        image.src = url;
+    })
+}
+// 借一张淘宝的图嘿嘿嘿
+loadImageAsync('https://img.alicdn.com/tfs/TB1VD1X1GL7gK0jSZFBXXXZZpXa-190-121.gif')
+    .then((res) => {
+        text.appendChild(res);
+    }).catch((err) => {
+        console.log(err);
+    })
+```
+
+
+
+## 动态加载一个JS，并在加载成功后执行回调函数
+
+1. 利用 `let srcipt = document.createElement('script')` 动态创建js
+2. 利用 `srcipt.onload = callbank;` 将回调函数赋值给 onload 事件，js文件加载成功后就会执行该函数。
+
+```js
+function loadJS(url, callback) {
+    let srcipt = document.createElement('script'),
+        fn = callback || function () {};
+    srcipt.type = 'text/javascript';
+    srcipt.onload = fn;
+    srcipt.src = url;
+    console.log(srcipt);
+    document.body.appendChild(srcipt);
+
+}
+
+loadJS('file.js', () => {
+    console.log('加载完成');
+})
+```
+
+> 这种封装如果请求失败就不会调用回调函数，并且会报错
+
++ 这个涉及到**按需加载js文件**，可以考虑一下如果多次请求，怎么让同样的文件只请求一次呢？
+
+  > 可以利用object的特性，再利用闭包，如下：
+  >
+  > ```js
+  > function loadJS(url, callback) {
+  >     let script = document.createElement('script'),
+  >         fn = callback || function () {};
+  >     script.type = 'text/javascript';
+  >     script.onload = fn;
+  >     script.src = url;
+  >     console.log(srcipt);
+  >     document.body.appendChild(script);
+  > 
+  > }
+  > // let scriptList = {};
+  > let url1 = 'js/file.js',
+  >     url2 = 'js/cccc.js',
+  >     cb1 = () => {
+  >         console.log('我是cb1');
+  >     },
+  >     cb2 = () => {
+  >         console.log('我是cb2');
+  >     };
+  > 
+  > // 检测加载的js是否有重复加载，如已加载过直接执行回调函数
+  > function check(url, cb) {
+  >     let scriptList = {};
+  >     return function () {
+  >         if (scriptList.hasOwnProperty(url)) {
+  >             cb();
+  >         } else {
+  >             scriptList[url] = true;
+  >             loadJS(url, cb);
+  >         }
+  >     }
+  > }
+  > 
+  > let add = check(url1, cb1);
+  > let add2 = check(url2, cb2);
+  > ```
+  >
+  > 
 
 
 
