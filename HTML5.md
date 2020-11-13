@@ -20,8 +20,8 @@
         - [head标签对](#head%E6%A0%87%E7%AD%BE%E5%AF%B9)
         - [body标签对](#body%E6%A0%87%E7%AD%BE%E5%AF%B9)
 - [浏览器的标准模式和怪异模式](#%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E6%A0%87%E5%87%86%E6%A8%A1%E5%BC%8F%E5%92%8C%E6%80%AA%E5%BC%82%E6%A8%A1%E5%BC%8F)
-    - [标准模式（strict mode）](#%E6%A0%87%E5%87%86%E6%A8%A1%E5%BC%8Fstrict-mode)
-    - [怪异模式（quirks mode）](#%E6%80%AA%E5%BC%82%E6%A8%A1%E5%BC%8Fquirks-mode)
+    - [标准模式strict mode](#%E6%A0%87%E5%87%86%E6%A8%A1%E5%BC%8Fstrict-mode)
+    - [怪异模式quirks mode](#%E6%80%AA%E5%BC%82%E6%A8%A1%E5%BC%8Fquirks-mode)
     - [标准模式和怪异模式的区别](#%E6%A0%87%E5%87%86%E6%A8%A1%E5%BC%8F%E5%92%8C%E6%80%AA%E5%BC%82%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB)
         - [width不同](#width%E4%B8%8D%E5%90%8C)
         - [内联元素的尺寸](#%E5%86%85%E8%81%94%E5%85%83%E7%B4%A0%E7%9A%84%E5%B0%BA%E5%AF%B8)
@@ -343,11 +343,11 @@ source.onmessage=function(event)
 
 ## 浏览器的标准模式和怪异模式
 
-### 标准模式（strict mode）
+### 标准模式strict mode
 
 + 标准模式（严格模式），浏览器按照W3C标准解析执行代码
 
-### 怪异模式（quirks mode）
+### 怪异模式quirks mode
 
 + 怪异模式（混杂模式），使用浏览器自己的方式解析执行代码
 

@@ -25,7 +25,7 @@
     - [CSS3多媒体查询](#css3%E5%A4%9A%E5%AA%92%E4%BD%93%E6%9F%A5%E8%AF%A2)
 - [CSS布局的三种机制](#css%E5%B8%83%E5%B1%80%E7%9A%84%E4%B8%89%E7%A7%8D%E6%9C%BA%E5%88%B6)
     - [普通流（标准流）](#%E6%99%AE%E9%80%9A%E6%B5%81%E6%A0%87%E5%87%86%E6%B5%81)
-    - [浮动（float）](#%E6%B5%AE%E5%8A%A8float)
+    - [浮动float](#%E6%B5%AE%E5%8A%A8float)
         - [清除浮动](#%E6%B8%85%E9%99%A4%E6%B5%AE%E5%8A%A8)
     - [定位（position）](#%E5%AE%9A%E4%BD%8Dposition)
         - [边偏移移](#%E8%BE%B9%E5%81%8F%E7%A7%BB%E7%A7%BB)
@@ -239,7 +239,7 @@
 
 块级元素、行内元素、行内块元素blabla
 
-### 浮动（float）
+### 浮动float
 
 >  让盒子从普通流中浮动起来
 
