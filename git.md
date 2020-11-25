@@ -403,11 +403,7 @@
 
 
 
-1. jjj
 
-  ```
-Creating a new branch is quick.
-  ```
 
 
 
