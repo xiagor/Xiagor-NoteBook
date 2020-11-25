@@ -280,7 +280,7 @@
 
 
 
-### 5. 花式撤销
+### 5. 花式撤销：reset
 
 ![img](Images/git/f29320c710544828a494918b1ec2da05~tplv-k3u1fbpfcp-zoom-1.image)
 
@@ -321,8 +321,29 @@
 
 
 
+### 6. 状态查询：reflog、log
 
-### 6. 文档查询
++ 查看状态
+
+  ```
+  git status
+  ```
+
++ 查看历史操作记录
+
+  ```
+  git reflog
+  ```
+
++ 查看日志
+
+  ```
+  git log
+  ```
+
+
+
+### 7. 文档查询：help
 
 + 展示Git命令大纲
 
@@ -338,7 +359,7 @@
 
 
 
-### 7. 文件暂存
+### 8. 文件暂存：stash
 
 ![img](Images/git/1b229cb4872e4991b33181cdad72b59d~tplv-k3u1fbpfcp-zoom-1.image)
 
@@ -351,16 +372,33 @@
 + 暂存代码
 
   ```
+  git stash save "备注"
+  ```
+
++ 恢复某条stash的代码
+
+  ```
+  git stash pop stash@{ID}
+  //如果是恢复stash@{0}的话可省略
+```
   
++ 删除某个stash暂存
+
+  ```
+  git stash drop stash@{ID}
+  ```
+
++ 删除全部stash
+
+  ```
+  git stash clear
   ```
 
   
 
+### 9. 差异比较：diff
 
-
-
-
-
+![img](Images/git/c779e736198247bfb0795b50dced0814~tplv-k3u1fbpfcp-zoom-1.image)
 
 
 
