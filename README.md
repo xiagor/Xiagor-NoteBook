@@ -34,7 +34,7 @@
 + [CSS3](./CSS3.md)
   + 进度：50%
   + CSS非常重要，特别是布局！按照思维导图一个个攻破！
-+ [JavaScript](.\JavaScript.md)
++ [JavaScript](./JavaScript.md)
   + 进度：40%
   + Ajax列入JavaScript中学习
   + 正则表达式列入其中
