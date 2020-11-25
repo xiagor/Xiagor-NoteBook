@@ -164,7 +164,7 @@
 
 
 
-### 3. 分支管理：branch、checkout
+### 3. 分支管理：branch、checkout、merge
 
 ![img](Images/git/3bff7ddbc6a145f993c0841eb81c8998~tplv-k3u1fbpfcp-zoom-1.image)
 
@@ -200,8 +200,11 @@
   git checkout -b <branch-name>
   //举个例子
   git checkout -b feature/test
+  //相当于
+//新建分支git branch feature/test
+  //再切换分支git checkout feature/test
   ```
-
+  
   > `git checkout`的全部指令：
 
 <img src="Images/git/image-20201125161822342.png" alt="image-20201125161822342" style="zoom:150%;" />
@@ -405,6 +408,8 @@
 
 Creating a new branch is quick.!!!
 
-Creating a new branch is quick & simple.
+
+Creating a new branch is quick and simple.
+
 
 
