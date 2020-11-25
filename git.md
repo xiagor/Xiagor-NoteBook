@@ -380,13 +380,14 @@
   ```
   git stash pop stash@{ID}
   //如果是恢复stash@{0}的话可省略
-```
-  
+  ```
+
 + 删除某个stash暂存
 
   ```
   git stash drop stash@{ID}
   ```
+
 
 + 删除全部stash
 
@@ -402,8 +403,11 @@
 
 
 
+1. jjj
 
-
+  ```
+Creating a new branch is quick.
+  ```
 
 
 
