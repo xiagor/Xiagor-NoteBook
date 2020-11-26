@@ -115,6 +115,20 @@
     - [new Image](#new-image)
     - [Promise实现代码](#promise%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81)
 - [动态加载一个JS，并在加载成功后执行回调函数](#%E5%8A%A8%E6%80%81%E5%8A%A0%E8%BD%BD%E4%B8%80%E4%B8%AAjs%E5%B9%B6%E5%9C%A8%E5%8A%A0%E8%BD%BD%E6%88%90%E5%8A%9F%E5%90%8E%E6%89%A7%E8%A1%8C%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0)
+- [什么是假值对象](#%E4%BB%80%E4%B9%88%E6%98%AF%E5%81%87%E5%80%BC%E5%AF%B9%E8%B1%A1)
+- [this对象的理解](#this%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%90%86%E8%A7%A3)
+    - [this的指向](#this%E7%9A%84%E6%8C%87%E5%90%91)
+    - [怎么改变this的指向](#%E6%80%8E%E4%B9%88%E6%94%B9%E5%8F%98this%E7%9A%84%E6%8C%87%E5%90%91)
+        - [箭头函数](#%E7%AE%AD%E5%A4%B4%E5%87%BD%E6%95%B0)
+        - [在函数内部使用 _this = this](#%E5%9C%A8%E5%87%BD%E6%95%B0%E5%86%85%E9%83%A8%E4%BD%BF%E7%94%A8-_this--this)
+        - [使用 apply、call、bind](#%E4%BD%BF%E7%94%A8-applycallbind)
+        - [使用 new 实例化一个对象](#%E4%BD%BF%E7%94%A8-new-%E5%AE%9E%E4%BE%8B%E5%8C%96%E4%B8%80%E4%B8%AA%E5%AF%B9%E8%B1%A1)
+    - [this 的四种调用模式](#this-%E7%9A%84%E5%9B%9B%E7%A7%8D%E8%B0%83%E7%94%A8%E6%A8%A1%E5%BC%8F)
+        - [函数调用模式](#%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E6%A8%A1%E5%BC%8F)
+        - [方法调用模式（隐式绑定）](#%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8%E6%A8%A1%E5%BC%8F%E9%9A%90%E5%BC%8F%E7%BB%91%E5%AE%9A)
+        - [构造器调用模式](#%E6%9E%84%E9%80%A0%E5%99%A8%E8%B0%83%E7%94%A8%E6%A8%A1%E5%BC%8F)
+        - [apply 、 call 和 bind 调用模式](#apply--call-%E5%92%8C-bind-%E8%B0%83%E7%94%A8%E6%A8%A1%E5%BC%8F)
+        - [四种模式的优先级](#%E5%9B%9B%E7%A7%8D%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7)
 
 <!-- /TOC -->
 
@@ -1938,6 +1952,323 @@ loadJS('file.js', () => {
   > ```
   >
   > 
+
+
+
+## 什么是假值对象
+
++ 什么是假值
+
+  在JavaScript中，false、null、0、”“、undefined 和 NaN被称为假值。
+
+  规范中规定“所有的对象都是真值”，即使封装的内容是假值，这些对象依旧是真值。
+
++ 什么是假值对象
+
+  在js代码中会出现对象判断为假的用法，但它实际上不属于JavaScript语言的范畴。跟浏览器有关。
+
+  浏览器在某些特定情况下，在常规 JavaScript 语法基础上自己创建了一些外来值，这些就是“假值对象”。
+
+  假值对象看起来和普通对象并无二致（都有属性，等等），但将它们强制类型转换为布尔值时结果为 false。
+
+  最常见的例子是 document.all，它是一个类数组对象，包含了页面上的所有元素，由 DOM（而不是 JavaScript 引擎）提供给 JavaScript 程序使用。
+
+
+
+## this对象的理解
+
+### this的指向
+
+> this永远指向最后调用它的那个对象
+
+```js
+var name = "windowsName";
+var a = {
+    name: "Cherry",
+    fn : function () {
+        console.log(this.name);      // Cherry
+    }
+}
+a.fn();
+```
+
++ a调用的fn，所以打印a的name
+
+```js
+var name = "windowsName";
+var a = {
+    name: "Cherry",
+    fn : function () {
+    	console.log(this.name);      // Cherry
+    }
+}
+window.a.fn();
+```
+
++ window调用a，a调用fn，最后调用fn的对象是a，即**this指向最后调用它的那个对象**
+
+```js
+var name = "windowsName";
+var a = {
+    // name: "Cherry",
+    fn : function () {
+    	console.log(this.name);      // undefined
+    }
+}
+window.a.fn();
+```
+
++ 这里为什么会打印 `undefined` 呢？这是因为正如刚刚所描述的那样，调用 fn 的是 a 对象，也就是说 fn 的内部的 this 是对象 a，而对象 a 中并没有对 name 进行定义，所以 log 的 `this.name` 的值是 `undefined`。
++ 这个例子还是说明了：**this 永远指向最后调用它的那个对象**，因为最后调用 fn 的对象是 a，所以就算 **a 中没有 name** 这个属性，也**不会**继续向上一个对象寻找 `this.name`，而是直接输出 `undefined`。
+
+```js
+var name = "windowsName";
+var a = {
+    name : null,
+    // name: "Cherry",
+    fn : function () {
+    	console.log(this.name);      // windowsName
+    }
+}
+
+var f = a.fn;
+f();
+```
+
++ 虽然将 a 对象的 fn 方法赋值给变量 f 了，但是**没有调用**。而**this永远执行指向最后调用它的那个对象**。最后调用 f 的是window，所以this指向window。
+
+```js
+var name = "windowsName";
+
+function fn() {
+    var name = 'Cherry';
+    innerFunction();
+    function innerFunction() {
+    	console.log(this.name);      // windowsName
+    }
+}
+
+fn()
+```
+
+
+
+### 怎么改变this的指向
+
+有以下几种方法：
+
+1. 使用 ES6 的箭头函数
+2. 在函数内部使用 `_this = this` 
+3. 使用 apply、call 、bind
+4. new实例化一个对象
+
+#### 箭头函数
+
+> 箭头函数的 this 始终指向**函数定义时的 this**，而非执行时。
+
+箭头函数没有 this 绑定，必须通过查找作用域链来决定其值，如果箭头函数被非箭头函数包含，则 this 绑定的是最近一层非箭头函数的 this ，否则，this 为 undefined。
+
+```js
+var name = "windowsName";
+
+var a = {
+    name : "Cherry",
+
+    func1: function () {
+        console.log(this.name)     
+    },
+
+    func2: function () {
+        setTimeout( () => {
+            this.func1()
+        },100);
+    }
+
+};
+
+a.func2()     // Cherry
+```
+
+
+
+#### 在函数内部使用 _this = this
+
+如果不使用 ES6，那么这种方式应该是最简单的不会出错的方式了，我们是先将调用这个函数的对象保存在变量 `_this` 中，然后在函数中都使用这个 `_this`，这样 `_this` 就不会改变了。
+
+```js
+var name = "windowsName";
+
+var a = {
+
+    name : "Cherry",
+
+    func1: function () {
+        console.log(this.name)     
+    },
+
+    func2: function () {
+        var _this = this;
+        setTimeout( function() {
+            _this.func1()
+        },100);
+    }
+
+};
+
+a.func2()       // Cherry
+```
+
+
+
+#### 使用 apply、call、bind
+
+1. apply 用法：
+
+```js
+var a = {
+    name : "Cherry",
+
+    func1: function () {
+        console.log(this.name)
+    },
+
+    func2: function () {
+        setTimeout(  function () {
+            this.func1()
+        }.apply(a),100);
+    }
+
+};
+
+a.func2()            // Cherry
+```
+
+2. call 用法：
+
+```js
+var a = {
+    name : "Cherry",
+
+    func1: function () {
+        console.log(this.name)
+    },
+
+    func2: function () {
+        setTimeout(  function () {
+            this.func1()
+        }.call(a),100);
+    }
+
+};
+
+a.func2()            // Cherry
+```
+
+3. bind 用法
+
+```js
+var a = {
+    name : "Cherry",
+
+    func1: function () {
+        console.log(this.name)
+    },
+
+    func2: function () {
+        setTimeout(  function () {
+            this.func1()
+        }.bind(a)(),100);
+    }
+
+};
+
+a.func2()            // Cherry
+```
+
++ 三个的区别：
+  + `fun.apply(thisArg, [argsArray])`
+    + thisArg：第一个参数是fun函数运行时指定的 this 值
+    + [argsArray]：一个数组或者类数组对象，其中的数组元素将作为单独的参数传给 fun 函数
+  + `fun.call(thisArg[, arg1[, arg2[, ...]]])`
+    + thisArg：第一个参数是fun函数运行时指定的 this 值
+    + [, arg1[, arg2[, ...]]]：传入若干个参数列表（apply 接收的是一个包含多个参数的数组）
+  + `function.bind(thisArg[, arg1[, arg2[, ...]]])`
+    + bind 和 call 传的参数一样，惟一不同的是 bind 是创建一个新的函数，需要手动去调用
+
+
+
+#### 使用 new 实例化一个对象
+
+当一个函数用作构造函数时（使用 new 关键字），它的 this 被绑定到正在构造的新对象。
+
+> 虽然构造函数返回的默认值是 `this` 所指的那个对象，但它仍可以手动返回其他的对象（如果返回值不是一个对象，则返回 `this` 对象）。
+
+```js
+function C(){
+  this.a = 37;
+}
+
+var o = new C();
+console.log(o.a); // logs 37
+
+
+function C2(){
+  this.a = 37;
+  return {a:38};
+}
+
+o = new C2();
+console.log(o.a); // logs 38
+```
+
+
+
+### this 的四种调用模式
+
+#### 函数调用模式
+
++ 当一个函数不是一个对象的属性时，直接作为函数来调用时，this 指向全局对象（严格模式是 undefined ）
+
+> 默认绑定
+
+#### 方法调用模式（隐式绑定）
+
++ 当一个函数作为一个对象的方法来调用时，this指向这个对象
+
+> 隐式绑定
+
+#### 构造器调用模式
+
++ 如果一个函数用 new 调用时，函数执行前会创建一个对象，this 指向这个新创建的对象
++ 涉及到另一个面试考点：[new的时候发生了什么](#new%E7%9A%84%E6%97%B6%E5%80%99%E5%8F%91%E7%94%9F%E4%BA%86%E4%BB%80%E4%B9%88) 
+
+> new绑定
+
+#### apply 、 call 和 bind 调用模式
+
++ 这三个方法都可以显式的指定调用函数的 this 指向
+
+> 显式绑定
+
+
+
+#### 四种模式的优先级
+
+构造器调用模式 > apply、call 和 bind 调用模式 > 方法调用模式 > 函数调用模式
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
