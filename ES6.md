@@ -88,6 +88,68 @@ export default、export、import属于es6，前两种都是导出模块，都是
 
 
 
+## 箭头函数的this
+
+> 箭头函数体内的`this`对象，就是**定义该函数时所在的作用域**指向的对象，而不是使用时所在的作用域指向的对象。
+
+看个例子：
+
+```js
+var name = 'window'; 
+
+var A = {
+   name: 'A',
+   sayHello: () => {
+      console.log(this.name)
+   }
+}
+
+A.sayHello();// 还是以为输出A ? 错啦，其实输出的是window
+```
+
+我重点标注了“**该函数所在的作用域指向的对象**”，作用域是指函数内部，
+
+这里的箭头函数，也就是sayHello，所在的作用域其实是最外层的js环境，**因为没有其他函数包裹**；
+
+然后最外层的js环境指向的对象是winodw对象，所以这里的this指向的是window对象。
+
+
+
+那么如何改造成永远绑定A呢：
+
+```js
+var name = 'window'; 
+
+var A = {
+   name: 'A',
+   sayHello: function(){
+      var s = () => console.log(this.name)
+      return s//返回箭头函数s
+   }
+}
+
+var sayHello = A.sayHello();
+sayHello();// 输出A 
+
+var B = {
+   name: 'B';
+}
+
+sayHello.call(B); //还是A
+sayHello.call(); //还是A
+```
+
+OK，这样就做到了永远指向A对象了，我们再根据“**该函数所在的作用域指向的对象**”来分析一下：
+
+1. **该函数所在的作用域：**箭头函数s 所在的作用域是sayHello,因为sayHello是一个函数。
+2. **作用域指向的对象：A.**sayHello指向的对象是A。
+
+所以箭头函数s 中this就是指向A啦 ～～
+
+
+
+
+
 ## 数组和对象的解构赋值
 
 1. 解构：ES6允许按照一定模式从数组和对象中提取值，然后对变量进行赋值，这被称为解构。

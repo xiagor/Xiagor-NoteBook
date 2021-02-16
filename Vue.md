@@ -172,6 +172,12 @@ watch: {
 
 
 
+## vue是如何将数据渲染到页面
+
+> 利用`Object.defineProperty`实现的
+
+还有和Dep、设计模式有关。具体如何实现，如何渲染，[参考该博文](https://www.cnblogs.com/Object-L/p/12574853.html)
+
 
 
 

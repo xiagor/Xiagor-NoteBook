@@ -2066,7 +2066,7 @@ fn()
 
 > 箭头函数的 this 始终指向**函数定义时的 this**，而非执行时。
 
-箭头函数没有 this 绑定，必须通过查找作用域链来决定其值，如果箭头函数被非箭头函数包含，则 this 绑定的是最近一层非箭头函数的 this ，否则，this 为 undefined。
+箭头函数没有 this 绑定，必须通过**查找作用域链**来决定其值，如果箭头函数被非箭头函数包含，则 this 绑定的是最近一层非箭头函数的 this ，否则，this 为 undefined。
 
 ```js
 var name = "windowsName";
