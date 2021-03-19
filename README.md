@@ -94,7 +94,7 @@
 
 - [x] HTML5几个语义化的标签及优点
 
-- [ ] box-sizing有哪些值？区别是什么？
+- [x] box-sizing有哪些值？区别是什么？
 
 - [ ] CSS3动画animation和transition的区别？
 
@@ -114,7 +114,6 @@
 
 - [ ] 大顶堆、二叉树
 
-- [ ] Websocket
 
 
 

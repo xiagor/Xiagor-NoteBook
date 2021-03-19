@@ -1559,7 +1559,19 @@ body {
 
 
 
+## box-sizing属性
 
+> 该属性定义了浏览器应该如何计算一个元素的总宽度和总高度
+
+有两个属性值：
+
++ `content-box`
+
+  默认值，标准盒子模型。`width`与`height`只包括内容的宽和高，不包括边框（border）、内边距（padding）、外边距（margin）。
+
++ `border-box`
+
+  `width`和`height`属性包括内容、内边距、边框。这是IE怪异模式的盒子模型。
 
 
 
