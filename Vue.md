@@ -6,10 +6,11 @@
 - [MVVM](#mvvm)
 - [vue的常见指令](#vue%E7%9A%84%E5%B8%B8%E8%A7%81%E6%8C%87%E4%BB%A4)
 - [methods、watch和computed的区别](#methodswatch%E5%92%8Ccomputed%E7%9A%84%E5%8C%BA%E5%88%AB)
-    - [作用机制上](#%E4%BD%9C%E7%94%A8%E6%9C%BA%E5%88%B6%E4%B8%8A)
-    - [从性质上](#%E4%BB%8E%E6%80%A7%E8%B4%A8%E4%B8%8A)
-    - [watch和computed的对比](#watch%E5%92%8Ccomputed%E7%9A%84%E5%AF%B9%E6%AF%94)
+  - [作用机制上](#%E4%BD%9C%E7%94%A8%E6%9C%BA%E5%88%B6%E4%B8%8A)
+  - [从性质上](#%E4%BB%8E%E6%80%A7%E8%B4%A8%E4%B8%8A)
+  - [watch和computed的对比](#watch%E5%92%8Ccomputed%E7%9A%84%E5%AF%B9%E6%AF%94)
 - [watch监听一个对象的属性或者监听整个对象](#watch%E7%9B%91%E5%90%AC%E4%B8%80%E4%B8%AA%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%B1%9E%E6%80%A7%E6%88%96%E8%80%85%E7%9B%91%E5%90%AC%E6%95%B4%E4%B8%AA%E5%AF%B9%E8%B1%A1)
+- [vue是如何将数据渲染到页面](#vue%E6%98%AF%E5%A6%82%E4%BD%95%E5%B0%86%E6%95%B0%E6%8D%AE%E6%B8%B2%E6%9F%93%E5%88%B0%E9%A1%B5%E9%9D%A2)
 
 <!-- /TOC -->
 

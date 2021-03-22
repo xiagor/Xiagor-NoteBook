@@ -1,3 +1,25 @@
+## 目录
+<!-- TOC -->
+
+- [目录](#目录)
+- [Performance](#performance)
+  - [区域一：控制面板](#区域一控制面板)
+  - [区域二：概览面板](#区域二概览面板)
+    - [FPS](#fps)
+    - [CPU](#cpu)
+    - [NET](#net)
+  - [区域三：线程面板](#区域三线程面板)
+    - [Frames](#frames)
+    - [Main！！！](#main)
+  - [区域四：统计面板](#区域四统计面板)
+    - [Summary](#summary)
+    - [Bottom-Up](#bottom-up)
+    - [Call Tree](#call-tree)
+    - [Event Log](#event-log)
+- [浏览器渲染过程](#浏览器渲染过程)
+
+<!-- /TOC -->
+
 ## Performance
 
 主要分为四个区域：

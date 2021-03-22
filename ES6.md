@@ -3,8 +3,9 @@
 <!-- TOC -->
 
 - [目录](#目录)
-- [export和export  default](#export和export-default)
+- [export和export  default](#export和export--default)
 - [箭头函数](#箭头函数)
+- [箭头函数的this](#箭头函数的this)
 - [数组和对象的解构赋值](#数组和对象的解构赋值)
 
 <!-- /TOC -->
@@ -89,6 +90,10 @@ export default、export、import属于es6，前两种都是导出模块，都是
 
 
 ## 箭头函数的this
+
+1. 普通函数的this:指向它的调用者,如果没有调用者则默认指向window.
+
+2. 箭头函数的this: 指向箭头函数定义时所处的对象,而不是箭头函数使用时所在的对象,默认使用父级的this
 
 > 箭头函数体内的`this`对象，就是**定义该函数时所在的作用域**指向的对象，而不是使用时所在的作用域指向的对象。
 
